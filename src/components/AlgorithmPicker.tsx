@@ -9,7 +9,7 @@ interface IProps {
 const AlgorithmPicker = ({ type, onChange }: IProps) => {
     return <div>
         {Algorithms.types.map(t => {
-            return <div style={{ fontSize: 28, marginBottom: 20, fontWeight: 800, opacity: t === type ? 1 : 0.3, cursor: 'pointer' }} onClick={() => onChange(t)}>{Algorithms.getName(t)}</div>
+            return <div style={{ fontSize: 48, marginBottom: 20, fontWeight: 800, opacity: t === type ? 1 : 0.3, cursor: 'pointer' }} onClick={() => onChange(t)}>{Algorithms.getName(t)}</div>
         })}
     </div>
 }

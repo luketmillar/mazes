@@ -26,7 +26,7 @@ export const get = (type: Type) => {
 export const getName = (type: Type) => {
     switch (type) {
         case Type.BinarySearchTree:
-            return 'Binary Search Tree'
+            return 'BST'
         case Type.Sidewinder:
         default:
             return 'Sidewinder'

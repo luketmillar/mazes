@@ -25,6 +25,7 @@ class Canvas extends React.Component<IProps, IState> {
     }
     public componentDidUpdate(previousProps: IProps) {
         if (previousProps.algorithmType !== this.props.algorithmType) {
+            this.setState({ showSolution: false })
             this.newGrid()
         }
         this.draw()
