@@ -24,14 +24,14 @@ const drawLine = (ctx: CanvasRenderingContext2D, from: Position, to: Position) =
     ctx.lineTo(to.x, to.y)
     ctx.stroke()
 }
-const drawNumber = (ctx: CanvasRenderingContext2D, cell: Cell, value: number) => {
-    ctx.font = "16px Arial"
-    ctx.fillStyle = "#888"
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    const cellBounds = getCellBounds(cell)
-    ctx.fillText(`${value}`, cellBounds.center, cellBounds.middle)
-}
+// const drawNumber = (ctx: CanvasRenderingContext2D, cell: Cell, value: number) => {
+//     ctx.font = "16px Arial"
+//     ctx.fillStyle = "#888"
+//     ctx.textAlign = 'center'
+//     ctx.textBaseline = 'middle'
+//     const cellBounds = getCellBounds(cell)
+//     ctx.fillText(`${value}`, cellBounds.center, cellBounds.middle)
+// }
 const drawRectangle = (ctx: CanvasRenderingContext2D, cell: Cell, color: string) => {
     ctx.fillStyle = color
     const cellBounds = getCellBounds(cell)
@@ -84,5 +84,10 @@ export default class GridDrawer {
             drawRectangle(ctx, cell, color)
             // drawNumber(ctx, cell, i)
         })
+    }
+
+    public drawStartEnd(ctx: CanvasRenderingContext2D, solution: Solution) {
+        drawRectangle(ctx, solution.start, '#15F46A')
+        drawRectangle(ctx, solution.end, `#E1219B`)
     }
 }

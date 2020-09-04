@@ -62,7 +62,6 @@ export default class Solver {
             const currentCell = path[path.length - 1]
             const nextDistance = distance - 1
             const next = currentCell.links.find(link => distances[link.id] === nextDistance)!
-            console.log(next)
             distance = distance - 1
             path.push(next)
         }

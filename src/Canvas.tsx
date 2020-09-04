@@ -12,13 +12,18 @@ const solution = solver.solve(grid)
 const drawer = new GridDrawer(grid)
 
 const Canvas = () => {
+    const [showSolution, setShowSolution] = React.useState(false)
     const ref = React.useRef<HTMLCanvasElement>(null)
     React.useEffect(() => {
         const ctx = ref.current!.getContext('2d')!
         drawer.draw(ctx)
-        drawer.drawSolution(ctx, solution)
-    }, [ref])
-    return <canvas ref={ref} width={drawer.width} height={drawer.height} />
+        if (showSolution) {
+            drawer.drawSolution(ctx, solution)
+        } else {
+            drawer.drawStartEnd(ctx, solution)
+        }
+    }, [ref, showSolution])
+    return <canvas onClick={() => setShowSolution(value => !value)} ref={ref} width={drawer.width} height={drawer.height} />
 }
 
 export default Canvas
