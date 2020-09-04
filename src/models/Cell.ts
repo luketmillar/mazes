@@ -11,7 +11,7 @@ export default class Cell {
     }
 
     private readonly grid: Grid
-    private readonly links: Record<string, boolean> = {}
+    private readonly linkIds: Record<string, boolean> = {}
 
     constructor(row: number, column: number, grid: Grid) {
         this.grid = grid
@@ -45,11 +45,11 @@ export default class Cell {
     }
 
     public link(cell: Cell) {
-        this.links[cell.id] = true
+        this.linkIds[cell.id] = true
     }
 
     public unlink(cell: Cell) {
-        delete this.links[cell.id]
+        delete this.linkIds[cell.id]
     }
 
     public isLinked(direction: Direction) {
@@ -57,7 +57,7 @@ export default class Cell {
         if (directionalNeighbor === undefined) {
             return false
         }
-        return this.links[directionalNeighbor.id]
+        return this.linkIds[directionalNeighbor.id]
     }
 
     private getNeighbor(direction: Direction) {
@@ -74,7 +74,11 @@ export default class Cell {
     }
 
     public get neighbors() {
-        const neighborIds = Object.keys(this.links)
-        return neighborIds.map(id => this.grid.getCellById(id)).filter(cell => cell !== undefined) as Cell[]
+        return [this.north, this.east, this.west, this.south].filter(Boolean) as Cell[]
+    }
+
+    public get links() {
+        const neighborIds = Object.keys(this.linkIds)
+        return neighborIds.map(id => this.grid.getCellById(id)).filter(Boolean) as Cell[]
     }
 }
