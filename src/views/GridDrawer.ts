@@ -35,7 +35,7 @@ const drawNumber = (ctx: CanvasRenderingContext2D, cell: Cell, value: number) =>
 const drawRectangle = (ctx: CanvasRenderingContext2D, cell: Cell, color: string) => {
     ctx.fillStyle = color
     const cellBounds = getCellBounds(cell)
-    const padding = 10
+    const padding = 15
     ctx.fillRect(cellBounds.left + padding, cellBounds.top + padding, cellBounds.width - padding * 2, cellBounds.height - padding * 2)
 }
 
