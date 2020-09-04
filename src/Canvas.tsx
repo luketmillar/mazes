@@ -17,10 +17,12 @@ const Canvas = () => {
     const pathCanvasRef = React.useRef<HTMLCanvasElement>(null)
     React.useEffect(() => {
         const ctx = gridCanvasRef.current!.getContext('2d')!
+        drawer.clear(ctx)
         drawer.draw(ctx)
     }, [gridCanvasRef])
     React.useEffect(() => {
         const ctx = pathCanvasRef.current!.getContext('2d')!
+        drawer.clear(ctx)
         if (showSolution) {
             drawer.drawSolution(ctx, solution)
         } else {

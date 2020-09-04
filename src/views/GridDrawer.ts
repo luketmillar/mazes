@@ -35,8 +35,22 @@ const drawLine = (ctx: CanvasRenderingContext2D, from: Position, to: Position) =
 const drawRectangle = (ctx: CanvasRenderingContext2D, cell: Cell, color: string) => {
     ctx.fillStyle = color
     const cellBounds = getCellBounds(cell)
-    const padding = 15
+    const padding = 10
     ctx.fillRect(cellBounds.left + padding, cellBounds.top + padding, cellBounds.width - padding * 2, cellBounds.height - padding * 2)
+}
+
+const drawPath = (ctx: CanvasRenderingContext2D, path: Cell[], color: string, width: number) => {
+    ctx.strokeStyle = color
+    ctx.lineWidth = width
+    path.forEach((cell, i) => {
+        const cellBounds = getCellBounds(cell)
+        if (i === 0) {
+            ctx.moveTo(cellBounds.center, cellBounds.middle)
+        } else {
+            ctx.lineTo(cellBounds.center, cellBounds.middle)
+        }
+    })
+    ctx.stroke()
 }
 
 export default class GridDrawer {
@@ -47,7 +61,6 @@ export default class GridDrawer {
     }
 
     public draw = (ctx: CanvasRenderingContext2D) => {
-        this.clear(ctx)
         ctx.strokeStyle = '#ffffff'
         ctx.lineWidth = 2
         drawLine(ctx, { x: 0, y: 0 }, { x: this.width, y: 0 })
@@ -77,18 +90,18 @@ export default class GridDrawer {
     }
 
     public drawSolution(ctx: CanvasRenderingContext2D, solution: Solution) {
-        this.clear(ctx)
-        solution.path.forEach((cell, i) => {
-            const first = i === 0
-            const last = i === solution.path.length - 1
-            const color = first ? '#15F46A' : last ? `#E1219B` : "#1AF8FF"
-            drawRectangle(ctx, cell, color)
-            // drawNumber(ctx, cell, i)
-        })
+        drawPath(ctx, solution.path, "#1AF8FF", 5)
+        this.drawStartEnd(ctx, solution)
+        // solution.path.forEach((cell, i) => {
+        //     const first = i === 0
+        //     const last = i === solution.path.length - 1
+        //     const color = first ? '#15F46A' : last ? `#E1219B` : "#1AF8FF"
+        //     drawRectangle(ctx, cell, color)
+        //     // drawNumber(ctx, cell, i)
+        // })
     }
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, solution: Solution) {
-        this.clear(ctx)
         drawRectangle(ctx, solution.start, '#15F46A')
         drawRectangle(ctx, solution.end, `#E1219B`)
     }
