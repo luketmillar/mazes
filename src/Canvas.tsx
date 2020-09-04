@@ -13,17 +13,33 @@ const drawer = new GridDrawer(grid)
 
 const Canvas = () => {
     const [showSolution, setShowSolution] = React.useState(false)
-    const ref = React.useRef<HTMLCanvasElement>(null)
+    const gridCanvasRef = React.useRef<HTMLCanvasElement>(null)
+    const pathCanvasRef = React.useRef<HTMLCanvasElement>(null)
     React.useEffect(() => {
-        const ctx = ref.current!.getContext('2d')!
+        const ctx = gridCanvasRef.current!.getContext('2d')!
         drawer.draw(ctx)
+    }, [gridCanvasRef])
+    React.useEffect(() => {
+        const ctx = pathCanvasRef.current!.getContext('2d')!
         if (showSolution) {
             drawer.drawSolution(ctx, solution)
         } else {
             drawer.drawStartEnd(ctx, solution)
         }
-    }, [ref, showSolution])
-    return <canvas onClick={() => setShowSolution(value => !value)} ref={ref} width={drawer.width} height={drawer.height} />
+    }, [pathCanvasRef, showSolution])
+    const toggleSolution = React.useCallback(() => {
+        setShowSolution(value => !value)
+    }, [])
+    return <div onClick={toggleSolution} style={{ width: drawer.width, height: drawer.height, position: 'relative' }}>
+        <Stacked>
+            <canvas ref={gridCanvasRef} width={drawer.width} height={drawer.height} />
+        </Stacked>
+        <Stacked>
+            <canvas ref={pathCanvasRef} width={drawer.width} height={drawer.height} />
+        </Stacked>
+    </div>
 }
+
+const Stacked = ({ children }: { children: React.ReactNode }) => <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>{children}</div>
 
 export default Canvas

@@ -47,7 +47,7 @@ export default class GridDrawer {
     }
 
     public draw = (ctx: CanvasRenderingContext2D) => {
-        ctx.clearRect(0, 0, this.width, this.height)
+        this.clear(ctx)
         ctx.strokeStyle = '#ffffff'
         ctx.lineWidth = 2
         drawLine(ctx, { x: 0, y: 0 }, { x: this.width, y: 0 })
@@ -77,6 +77,7 @@ export default class GridDrawer {
     }
 
     public drawSolution(ctx: CanvasRenderingContext2D, solution: Solution) {
+        this.clear(ctx)
         solution.path.forEach((cell, i) => {
             const first = i === 0
             const last = i === solution.path.length - 1
@@ -87,7 +88,12 @@ export default class GridDrawer {
     }
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, solution: Solution) {
+        this.clear(ctx)
         drawRectangle(ctx, solution.start, '#15F46A')
         drawRectangle(ctx, solution.end, `#E1219B`)
+    }
+
+    public clear(ctx: CanvasRenderingContext2D) {
+        ctx.clearRect(0, 0, this.width, this.height)
     }
 }
