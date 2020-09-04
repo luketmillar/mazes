@@ -20,9 +20,11 @@ const getCellBounds = (cell: Cell) => {
     }
 }
 const drawLine = (ctx: CanvasRenderingContext2D, from: Position, to: Position) => {
+    ctx.beginPath()
     ctx.moveTo(from.x, from.y)
     ctx.lineTo(to.x, to.y)
     ctx.stroke()
+    ctx.closePath()
 }
 // const drawNumber = (ctx: CanvasRenderingContext2D, cell: Cell, value: number) => {
 //     ctx.font = "16px Arial"
@@ -40,6 +42,7 @@ const drawRectangle = (ctx: CanvasRenderingContext2D, cell: Cell, color: string)
 }
 
 const drawPath = (ctx: CanvasRenderingContext2D, path: Cell[], color: string, width: number) => {
+    ctx.beginPath()
     ctx.strokeStyle = color
     ctx.lineWidth = width
     path.forEach((cell, i) => {
@@ -51,6 +54,7 @@ const drawPath = (ctx: CanvasRenderingContext2D, path: Cell[], color: string, wi
         }
     })
     ctx.stroke()
+    ctx.closePath()
 }
 
 export default class GridDrawer {
@@ -92,13 +96,6 @@ export default class GridDrawer {
     public drawSolution(ctx: CanvasRenderingContext2D, solution: Solution) {
         drawPath(ctx, solution.path, "#1AF8FF", 5)
         this.drawStartEnd(ctx, solution)
-        // solution.path.forEach((cell, i) => {
-        //     const first = i === 0
-        //     const last = i === solution.path.length - 1
-        //     const color = first ? '#15F46A' : last ? `#E1219B` : "#1AF8FF"
-        //     drawRectangle(ctx, cell, color)
-        //     // drawNumber(ctx, cell, i)
-        // })
     }
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, solution: Solution) {
