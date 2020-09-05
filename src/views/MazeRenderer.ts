@@ -1,18 +1,18 @@
-import Grid from "../models/Grid"
 import Direction from "../models/Direction"
-import Cell from "../models/Cell"
-import { Solution } from "../models/Solver"
+import Maze from "../models/Maze"
+import Character from "../models/Chracter"
+import { Position } from "../models/Position"
 
-type Position = {
+type Pixel = {
     x: number
     y: number
 }
 
-export default class GridDrawer {
+export default class MazeRenderer {
     public cellSize = 20
-    private readonly grid: Grid
-    constructor(grid: Grid, cellSize: number) {
-        this.grid = grid
+    private readonly maze: Maze
+    constructor(maze: Maze, cellSize: number) {
+        this.maze = maze
         this.cellSize = cellSize
     }
 
@@ -45,21 +45,25 @@ export default class GridDrawer {
         return this.grid.rowCount * this.cellSize
     }
 
-    public drawSolution(ctx: CanvasRenderingContext2D, solution: Solution) {
-        this.drawPath(ctx, solution.path, "#1AF8FF", 2)
-        this.drawStartEnd(ctx, solution)
+    public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position) {
+        this.drawRectangle(ctx, start, '#15F46A')
+        this.drawRectangle(ctx, end, `#E1219B`)
     }
 
-    public drawStartEnd(ctx: CanvasRenderingContext2D, solution: Solution) {
-        this.drawRectangle(ctx, solution.start, '#15F46A')
-        this.drawRectangle(ctx, solution.end, `#E1219B`)
+    public drawCharacter(ctx: CanvasRenderingContext2D, character: Character) {
+        this.drawRectangle(ctx, character.position, '#15F46A')
+        this.drawPath(ctx, character.history, '#15F46A', 1)
     }
 
     public clear(ctx: CanvasRenderingContext2D) {
         ctx.clearRect(0, 0, this.width, this.height)
     }
 
-    private drawPath = (ctx: CanvasRenderingContext2D, path: Cell[], color: string, width: number) => {
+    private get grid() {
+        return this.maze.grid
+    }
+
+    private drawPath = (ctx: CanvasRenderingContext2D, path: Position[], color: string, width: number) => {
         ctx.beginPath()
         ctx.strokeStyle = color
         ctx.lineWidth = width
@@ -75,25 +79,25 @@ export default class GridDrawer {
         ctx.closePath()
     }
 
-    private drawRectangle = (ctx: CanvasRenderingContext2D, cell: Cell, color: string) => {
+    private drawRectangle = (ctx: CanvasRenderingContext2D, position: Position, color: string) => {
         ctx.fillStyle = color
-        const cellBounds = this.getCellBounds(cell)
+        const cellBounds = this.getCellBounds(position)
         const size = this.cellSize * 0.5
         ctx.fillRect(cellBounds.center - size / 2, cellBounds.middle - size / 2, size, size)
     }
-    private getCellBounds = (cell: Cell) => {
+    private getCellBounds = (position: Position) => {
         return {
-            left: cell.column * this.cellSize,
-            right: (cell.column + 1) * this.cellSize,
-            top: cell.row * this.cellSize,
-            bottom: (cell.row + 1) * this.cellSize,
+            left: position.column * this.cellSize,
+            right: (position.column + 1) * this.cellSize,
+            top: position.row * this.cellSize,
+            bottom: (position.row + 1) * this.cellSize,
             width: this.cellSize,
             height: this.cellSize,
-            center: (cell.column + 0.5) * this.cellSize,
-            middle: (cell.row + 0.5) * this.cellSize
+            center: (position.column + 0.5) * this.cellSize,
+            middle: (position.row + 0.5) * this.cellSize
         }
     }
-    private drawLine = (ctx: CanvasRenderingContext2D, from: Position, to: Position) => {
+    private drawLine = (ctx: CanvasRenderingContext2D, from: Pixel, to: Pixel) => {
         ctx.beginPath()
         ctx.moveTo(from.x, from.y)
         ctx.lineTo(to.x, to.y)

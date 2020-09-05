@@ -1,5 +1,6 @@
 import Grid from "./Grid"
 import Direction from './Direction'
+import { Position } from "./Position"
 
 export default class Cell {
     public static createId = (row: number, column: number) => `${row}-${column}`
@@ -42,6 +43,24 @@ export default class Cell {
             return undefined
         }
         return this.grid.getCell(this.row, this.column - 1)
+    }
+    public get position(): Position {
+        return { row: this.row, column: this.column }
+    }
+    public canGo(direction: Direction) {
+        switch (direction) {
+            case Direction.North:
+                return this.north && this.links.includes(this.north)
+            case Direction.South:
+                return this.south && this.links.includes(this.south)
+            case Direction.East:
+                return this.east && this.links.includes(this.east)
+            case Direction.West:
+                return this.west && this.links.includes(this.west)
+        }
+    }
+    public get atIntersection() {
+        return this.links.length > 2
     }
 
     public link(cell: Cell) {

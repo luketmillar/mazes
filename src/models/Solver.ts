@@ -9,7 +9,7 @@ export type Solution = {
     path: Cell[]
 }
 
-export default class Solver {
+class Solver {
     public solve(grid: Grid): Solution {
         const start = this.findFarthestCell(grid)
         const distances = this.findDistances(grid, start)
@@ -68,3 +68,5 @@ export default class Solver {
         return path.reverse()
     }
 }
+
+export default new Solver()
