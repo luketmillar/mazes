@@ -72,6 +72,10 @@ export default class Grid {
         b.unlink(a)
     }
 
+    public get deadends() {
+        return this.cells.filter(cell => cell.links.length === 1)
+    }
+
     private generateCells = () => {
         for (let row = 0; row < this.rowCount; row++) {
             for (let column = 0; column < this.columnCount; column++) {

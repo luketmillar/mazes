@@ -13,7 +13,7 @@ interface IState {
 class Canvas extends React.Component<IProps, IState> {
     private gridCanvasRef = React.createRef<HTMLCanvasElement>()
     private pathCanvasRef = React.createRef<HTMLCanvasElement>()
-    private grid: Grid = new Grid(10, 20)
+    private grid: Grid = new Grid(20, 30)
     private drawer: GridDrawer = new GridDrawer(this.grid)
     private solver: Solver = new Solver()
     private solution: Solution
@@ -38,8 +38,7 @@ class Canvas extends React.Component<IProps, IState> {
         return Algorithms.get(this.props.algorithmType)
     }
     private newGrid() {
-        console.log('new grid')
-        this.grid = new Grid(10, 20)
+        this.grid = new Grid(20, 30)
         this.drawer = new GridDrawer(this.grid)
         this.algorithm.create(this.grid)
         this.solution = this.solver.solve(this.grid)
@@ -47,12 +46,10 @@ class Canvas extends React.Component<IProps, IState> {
     }
     private drawGrid() {
         const ctx = this.gridCanvasRef.current!.getContext('2d')!
-        console.log('drawGrid')
         this.drawer.clear(ctx)
         this.drawer.draw(ctx)
     }
     private draw() {
-        console.log('draw')
         const ctx = this.pathCanvasRef.current!.getContext('2d')!
         this.drawer.clear(ctx)
         if (this.state.showSolution) {
@@ -62,7 +59,6 @@ class Canvas extends React.Component<IProps, IState> {
         }
     }
     public render() {
-        console.log('render')
         return <div onClick={() => this.setState({ showSolution: !this.state.showSolution })} style={{ width: this.drawer.width, height: this.drawer.height, position: 'relative' }}>
             <Stacked>
                 <canvas ref={this.gridCanvasRef} width={this.drawer.width} height={this.drawer.height} />
