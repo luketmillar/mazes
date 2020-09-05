@@ -6,7 +6,6 @@ import * as Algorithms from './models/MazeAlgorithms/Directory'
 
 function App() {
   const [algorithm, setAlgorithm] = React.useState(Algorithms.types[0])
-  const [key, setKey] = React.useState(0)
   return (
     <>
       <div style={{ height: 40 }} />
@@ -18,9 +17,7 @@ function App() {
           <div style={{ width: 60 }} />
         </div>
         <div>
-          <div style={{ cursor: 'pointer', textTransform: 'uppercase', letterSpacing: 3, fontWeight: 600 }} onClick={() => setKey(v => v + 1)}>New</div>
-          <div style={{ height: 10 }} />
-          <Canvas key={key} algorithmType={algorithm} />
+          <Canvas algorithmType={algorithm} />
         </div>
       </div>
     </>
