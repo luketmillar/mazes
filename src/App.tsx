@@ -1,25 +1,16 @@
 import React from 'react'
 import './App.css'
 import Canvas from './components/Canvas'
-import AlgorithmPicker from './components/AlgorithmPicker'
 import * as Algorithms from './models/MazeAlgorithms/Directory'
 import { useLayoutType } from './components/useLayout'
 
 function App() {
-  const [algorithm, setAlgorithm] = React.useState(Algorithms.types[1])
   const layoutType = useLayoutType()
   return (
     <>
-      <div style={{ height: 40 }} />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div className="menu">
-          <div style={{ marginTop: 40 }}>
-            <AlgorithmPicker type={algorithm} onChange={setAlgorithm} />
-          </div>
-          <div style={{ width: 60 }} />
-        </div>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div>
-          <Canvas algorithmType={algorithm} layoutType={layoutType} />
+          <Canvas algorithmType={Algorithms.types[1]} layoutType={layoutType} />
         </div>
       </div>
     </>
