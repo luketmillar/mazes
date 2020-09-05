@@ -5,7 +5,7 @@ import AlgorithmPicker from './components/AlgorithmPicker'
 import * as Algorithms from './models/MazeAlgorithms/Directory'
 
 function App() {
-  const [algorithm, setAlgorithm] = React.useState(Algorithms.Type.Sidewinder)
+  const [algorithm, setAlgorithm] = React.useState(Algorithms.Type.AldousBroder)
   const [key, setKey] = React.useState(0)
   return (
     <div style={{ margin: 100, display: 'flex' }}>
