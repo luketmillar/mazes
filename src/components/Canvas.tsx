@@ -13,7 +13,7 @@ interface IState {
 class Canvas extends React.Component<IProps, IState> {
     private gridCanvasRef = React.createRef<HTMLCanvasElement>()
     private pathCanvasRef = React.createRef<HTMLCanvasElement>()
-    private grid: Grid = new Grid(20, 30)
+    private grid: Grid = new Grid(30, 15)
     private drawer: GridDrawer = new GridDrawer(this.grid)
     private solver: Solver = new Solver()
     private solution: Solution
@@ -38,7 +38,7 @@ class Canvas extends React.Component<IProps, IState> {
         return Algorithms.get(this.props.algorithmType)
     }
     private newGrid() {
-        this.grid = new Grid(20, 30)
+        this.grid = new Grid(30, 15)
         this.drawer = new GridDrawer(this.grid)
         this.algorithm.create(this.grid)
         this.solution = this.solver.solve(this.grid)

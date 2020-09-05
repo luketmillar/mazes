@@ -58,7 +58,7 @@ const drawPath = (ctx: CanvasRenderingContext2D, path: Cell[], color: string, wi
 }
 
 export default class GridDrawer {
-    public static CellSize = 30
+    public static CellSize = 20
     private readonly grid: Grid
     constructor(grid: Grid) {
         this.grid = grid
