@@ -37,8 +37,8 @@ const drawLine = (ctx: CanvasRenderingContext2D, from: Position, to: Position) =
 const drawRectangle = (ctx: CanvasRenderingContext2D, cell: Cell, color: string) => {
     ctx.fillStyle = color
     const cellBounds = getCellBounds(cell)
-    const padding = 10
-    ctx.fillRect(cellBounds.left + padding, cellBounds.top + padding, cellBounds.width - padding * 2, cellBounds.height - padding * 2)
+    const size = GridDrawer.CellSize * 0.5
+    ctx.fillRect(cellBounds.center - size / 2, cellBounds.middle - size / 2, size, size)
 }
 
 const drawPath = (ctx: CanvasRenderingContext2D, path: Cell[], color: string, width: number) => {
@@ -94,7 +94,7 @@ export default class GridDrawer {
     }
 
     public drawSolution(ctx: CanvasRenderingContext2D, solution: Solution) {
-        drawPath(ctx, solution.path, "#1AF8FF", 5)
+        drawPath(ctx, solution.path, "#1AF8FF", 2)
         this.drawStartEnd(ctx, solution)
     }
 

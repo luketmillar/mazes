@@ -81,4 +81,16 @@ export default class Cell {
         const neighborIds = Object.keys(this.linkIds)
         return neighborIds.map(id => this.grid.getCellById(id)).filter(Boolean) as Cell[]
     }
+
+    public get unlinkedNeighbors() {
+        return this.neighbors.filter(neighbor => neighbor.links.length === 0)
+    }
+
+    public get linkedNeighbors() {
+        return this.neighbors.filter(neighbor => neighbor.links.length > 0)
+    }
+
+    public get isVisited() {
+        return this.links.length > 0
+    }
 }
