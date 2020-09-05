@@ -1,18 +1,21 @@
 import BinarySearchTree from "./BinarySearchTree"
 import Sidewinder from "./Sidewinder"
 import AldousBroder from "./AldousBroder"
+import Wilson from "./Wilson"
 
 export enum Type {
-    BinarySearchTree,
+    Wilson,
+    AldousBroder,
     Sidewinder,
-    AldousBroder
+    BinarySearchTree,
 }
-export const types = [Type.BinarySearchTree, Type.Sidewinder, Type.AldousBroder]
+export const types = [Type.Wilson, Type.AldousBroder, Type.Sidewinder, Type.BinarySearchTree]
 
 export const algorithms = [
     new BinarySearchTree(),
     new Sidewinder(),
-    new AldousBroder()
+    new AldousBroder(),
+    new Wilson(),
 ]
 
 export const get = (type: Type) => {
@@ -23,6 +26,8 @@ export const get = (type: Type) => {
             return algorithms[1]
         case Type.AldousBroder:
             return algorithms[2]
+        case Type.Wilson:
+            return algorithms[3]
     }
 }
 
@@ -34,7 +39,8 @@ export const getName = (type: Type) => {
         case Type.AldousBroder:
             return 'Aldous-Broder'
         case Type.Sidewinder:
-        default:
             return 'Sidewinder'
+        case Type.Wilson:
+            return 'Wilson'
     }
 }
