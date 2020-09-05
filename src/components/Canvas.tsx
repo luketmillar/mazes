@@ -3,11 +3,32 @@ import Grid from '../models/Grid'
 import GridDrawer from '../views/GridDrawer'
 import Solver, { Solution } from '../models/Solver'
 import * as Algorithms from '../models/MazeAlgorithms/Directory'
+import { LayoutType } from './useLayout'
 
-const GridSize = { columns: 15, rows: 30 }
+const createGrid = (layoutType: LayoutType) => {
+    switch (layoutType) {
+        case LayoutType.Phone:
+            return new Grid(30, 15)
+        case LayoutType.iPad:
+            return new Grid(30, 30)
+        case LayoutType.Desktop:
+            return new Grid(30, 50)
+    }
+}
+const createGridDrawer = (grid: Grid, layoutType: LayoutType) => {
+    switch (layoutType) {
+        case LayoutType.Phone:
+            return new GridDrawer(grid, 15)
+        case LayoutType.iPad:
+            return new GridDrawer(grid, 20)
+        case LayoutType.Desktop:
+            return new GridDrawer(grid, 25)
+    }
+}
 
 interface IProps {
     algorithmType: Algorithms.Type
+    layoutType: LayoutType
 }
 interface IState {
     showSolution: boolean
@@ -15,22 +36,26 @@ interface IState {
 class Canvas extends React.Component<IProps, IState> {
     private gridCanvasRef = React.createRef<HTMLCanvasElement>()
     private pathCanvasRef = React.createRef<HTMLCanvasElement>()
-    private grid: Grid = new Grid(GridSize.rows, GridSize.columns)
-    private drawer: GridDrawer = new GridDrawer(this.grid)
+    private grid: Grid
+    private drawer: GridDrawer
     private solver: Solver = new Solver()
     private solution: Solution
     constructor(props: IProps) {
         super(props)
+        this.grid = createGrid(props.layoutType)
+        this.drawer = createGridDrawer(this.grid, props.layoutType)
         this.algorithm.create(this.grid)
         this.solution = this.solver.solve(this.grid)
         this.state = { showSolution: false }
     }
     public componentDidUpdate(previousProps: IProps) {
-        if (previousProps.algorithmType !== this.props.algorithmType) {
+        if (previousProps.algorithmType !== this.props.algorithmType || previousProps.layoutType !== this.props.layoutType) {
             this.setState({ showSolution: false })
             this.newGrid()
         }
+        this.drawGrid()
         this.draw()
+
     }
     public componentDidMount() {
         this.drawGrid()
@@ -40,11 +65,12 @@ class Canvas extends React.Component<IProps, IState> {
         return Algorithms.get(this.props.algorithmType)
     }
     private newGrid() {
-        this.grid = new Grid(GridSize.rows, GridSize.columns)
-        this.drawer = new GridDrawer(this.grid)
+        this.grid = createGrid(this.props.layoutType)
+        this.drawer = createGridDrawer(this.grid, this.props.layoutType)
         this.algorithm.create(this.grid)
         this.solution = this.solver.solve(this.grid)
         this.drawGrid()
+        this.forceUpdate()
     }
     private drawGrid() {
         const ctx = this.gridCanvasRef.current!.getContext('2d')!

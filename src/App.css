@@ -4,8 +4,6 @@ body {
   font-family: 'Montserrat';
 }
 
-@media only screen and (max-width: 3000px) {
-  .menu {
-    display: none;
-  }
+.menu {
+  display: none;
 }
