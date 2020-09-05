@@ -65,7 +65,7 @@ export default class GridDrawer {
     }
 
     public draw = (ctx: CanvasRenderingContext2D) => {
-        ctx.strokeStyle = '#ffffff'
+        ctx.strokeStyle = '#fff'
         ctx.lineWidth = 2
         drawLine(ctx, { x: 0, y: 0 }, { x: this.width, y: 0 })
         this.grid.rows.forEach((row, r) => {

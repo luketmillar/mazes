@@ -4,6 +4,8 @@ import GridDrawer from '../views/GridDrawer'
 import Solver, { Solution } from '../models/Solver'
 import * as Algorithms from '../models/MazeAlgorithms/Directory'
 
+const GridSize = { columns: 15, rows: 30 }
+
 interface IProps {
     algorithmType: Algorithms.Type
 }
@@ -13,7 +15,7 @@ interface IState {
 class Canvas extends React.Component<IProps, IState> {
     private gridCanvasRef = React.createRef<HTMLCanvasElement>()
     private pathCanvasRef = React.createRef<HTMLCanvasElement>()
-    private grid: Grid = new Grid(30, 15)
+    private grid: Grid = new Grid(GridSize.rows, GridSize.columns)
     private drawer: GridDrawer = new GridDrawer(this.grid)
     private solver: Solver = new Solver()
     private solution: Solution
@@ -38,7 +40,7 @@ class Canvas extends React.Component<IProps, IState> {
         return Algorithms.get(this.props.algorithmType)
     }
     private newGrid() {
-        this.grid = new Grid(30, 15)
+        this.grid = new Grid(GridSize.rows, GridSize.columns)
         this.drawer = new GridDrawer(this.grid)
         this.algorithm.create(this.grid)
         this.solution = this.solver.solve(this.grid)
