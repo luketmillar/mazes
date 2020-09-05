@@ -5,7 +5,7 @@ import AlgorithmPicker from './components/AlgorithmPicker'
 import * as Algorithms from './models/MazeAlgorithms/Directory'
 
 function App() {
-  const [algorithm, setAlgorithm] = React.useState(Algorithms.types[0])
+  const [algorithm, setAlgorithm] = React.useState(Algorithms.types[1])
   return (
     <>
       <div style={{ height: 40 }} />
