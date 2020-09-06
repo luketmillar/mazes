@@ -3,22 +3,24 @@ import Maze from "../models/Maze"
 import MazeRenderer from "../views/MazeRenderer"
 import Direction from "../models/Direction"
 import Subscribable, { Fn } from "../utils/Subscribable"
+import { Position } from "../models/Position"
 
 export enum ControllerEvent {
     Maze,
     Character,
-    All
+    All,
+    Win
 }
 
 export default class Controller extends Subscribable<ControllerEvent> {
     private maze: Maze
     private character: Character
-    public readonly renderer: MazeRenderer
+    public renderer: MazeRenderer
 
     constructor() {
         super()
-        this.maze = new Maze(20, 20)
-        this.renderer = new MazeRenderer(this.maze, 20)
+        this.maze = new Maze(20, 40)
+        this.renderer = new MazeRenderer(this.maze, 40)
         this.character = new Character(this.maze.start.row, this.maze.start.column)
     }
 
@@ -29,8 +31,9 @@ export default class Controller extends Subscribable<ControllerEvent> {
     }
 
     public newLevel() {
-        this.maze = new Maze(20, 20)
-        this.character = new Character(this.maze.start.row, this.maze.start.row)
+        this.maze = new Maze(30, 40)
+        this.renderer = new MazeRenderer(this.maze, 40)
+        this.character = new Character(this.maze.start.row, this.maze.start.column)
         this.notify(ControllerEvent.All)
     }
 
@@ -43,8 +46,7 @@ export default class Controller extends Subscribable<ControllerEvent> {
                 break
             }
         }
-        this.character.setPosition(cell)
-        this.notify(ControllerEvent.Character)
+        this.moveCharacter(cell)
     }
     public down() {
         let cell = this.currentCell
@@ -55,8 +57,7 @@ export default class Controller extends Subscribable<ControllerEvent> {
                 break
             }
         }
-        this.character.setPosition(cell)
-        this.notify(ControllerEvent.Character)
+        this.moveCharacter(cell)
     }
     public left() {
         let cell = this.currentCell
@@ -67,8 +68,8 @@ export default class Controller extends Subscribable<ControllerEvent> {
                 break
             }
         }
-        this.character.setPosition(cell)
-        this.notify(ControllerEvent.Character)
+        this.moveCharacter(cell)
+
     }
     public right() {
         let cell = this.currentCell
@@ -79,8 +80,7 @@ export default class Controller extends Subscribable<ControllerEvent> {
                 break
             }
         }
-        this.character.setPosition(cell)
-        this.notify(ControllerEvent.Character)
+        this.moveCharacter(cell)
     }
 
     public drawMaze(ctx: CanvasRenderingContext2D) {
@@ -98,7 +98,30 @@ export default class Controller extends Subscribable<ControllerEvent> {
         return { width: this.renderer.width, height: this.renderer.height }
     }
 
+    public tickTime(timestamp: number) {
+        this.character.tickTime(timestamp)
+        this.notify(ControllerEvent.Character)
+        this.checkWin()
+    }
+
+    private moveCharacter(position: Position) {
+        if (this.character.isAnimating) {
+            // cant move character while animating
+            return
+        }
+        this.character.setPosition(position)
+        this.notify(ControllerEvent.Character)
+        this.checkWin()
+    }
+
     private get currentCell() {
         return this.maze.grid.getCell(this.character.row, this.character.column)!
+    }
+
+    private checkWin() {
+        if (this.character.position.row === this.maze.end.row && this.character.position.column === this.maze.end.column) {
+            // win!!
+            this.notify(ControllerEvent.Win)
+        }
     }
 }

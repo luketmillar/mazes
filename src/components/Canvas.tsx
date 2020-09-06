@@ -3,6 +3,7 @@ import * as Algorithms from '../models/MazeAlgorithms/Directory'
 import { LayoutType } from './useLayout'
 import Controller, { ControllerEvent } from '../controller/controller'
 import { useKeyboardCommands } from '../commands/hook'
+import rafManager from '../utils/RafManager'
 
 
 interface IProps {
@@ -38,8 +39,18 @@ const Canvas = ({ algorithmType, layoutType }: IProps) => {
                     controller.drawMaze(mazeCtx)
                     return
                 }
+                case ControllerEvent.Win: {
+                    controller.newLevel()
+                    return
+                }
             }
         })
+    }, [controller])
+    React.useEffect(() => {
+        const onRaf = (timestamp: number) => {
+            controller.tickTime(timestamp)
+        }
+        return rafManager.addListener(onRaf)
     }, [controller])
     useKeyboardCommands(controller)
 

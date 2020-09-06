@@ -11,6 +11,8 @@ type Pixel = {
 export default class MazeRenderer {
     public cellSize = 20
     private readonly maze: Maze
+    private timestamp: number = performance.now()
+
     constructor(maze: Maze, cellSize: number) {
         this.maze = maze
         this.cellSize = cellSize
@@ -46,13 +48,17 @@ export default class MazeRenderer {
     }
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position) {
-        this.drawRectangle(ctx, start, '#15F46A')
+        // this.drawRectangle(ctx, start, '#15F46A')
         this.drawRectangle(ctx, end, `#E1219B`)
     }
 
     public drawCharacter(ctx: CanvasRenderingContext2D, character: Character) {
         this.drawRectangle(ctx, character.position, '#15F46A')
-        this.drawPath(ctx, character.history, '#15F46A', 1)
+        // this.drawPath(ctx, character.history, '#15F46A', 1)
+    }
+
+    public setTime(timestamp: number) {
+        this.timestamp = timestamp
     }
 
     public clear(ctx: CanvasRenderingContext2D) {
