@@ -116,6 +116,7 @@ export default class InputHandler {
     private readonly cellSize: number = 0
     private element: HTMLDivElement | undefined
     private swipeGestureRecognizer?: SwipeGestureRecognizer
+    private isSwiping = false
     constructor(rows: number, columns: number, cellSize: number) {
         this.rows = rows
         this.columns = columns
@@ -128,6 +129,9 @@ export default class InputHandler {
 
     public onMouseDown = (pixel: Pixel, options?: IEventOptions) => {
         this.swipeGestureRecognizer = new SwipeGestureRecognizer(pixel)
+        if (this.isSwiping) {
+            return
+        }
         const position = this.positionFromPixel(pixel)
         if (position === undefined) {
             return
@@ -165,6 +169,7 @@ export default class InputHandler {
         const swipeDirection = this.swipeGestureRecognizer?.onEnd()
         this.swipeGestureRecognizer = undefined
         if (swipeDirection !== undefined) {
+            this.isSwiping = true
             this.notifySwipe(swipeDirection)
         }
         if (this.lastPosition !== undefined) {
