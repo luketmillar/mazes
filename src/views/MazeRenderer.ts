@@ -16,7 +16,7 @@ export default class MazeRenderer {
 
     public draw = (ctx: CanvasRenderingContext2D) => {
         ctx.strokeStyle = '#fff'
-        ctx.lineWidth = 2
+        ctx.lineWidth = 2 * window.devicePixelRatio
         this.drawLine(ctx, { x: 0, y: 0 }, { x: this.width, y: 0 })
         this.grid.rows.forEach((row, r) => {
             const yTop = r * this.cellSize

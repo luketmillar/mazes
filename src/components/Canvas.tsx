@@ -1,25 +1,62 @@
 import React from 'react'
-import { LayoutType } from './useLayout'
+import { LayoutType, getWindowSize } from './useLayout'
 import Controller, { ControllerEvent } from '../controller/controller'
 import { useKeyboardCommands } from '../commands/hook'
 import rafManager from '../utils/RafManager'
 import InputLayer from './InputLayer'
 import CharacterTool from '../tools/CharacterTool'
 import Winner from './Winner'
+import { Size } from '../utils/Types'
 
-const getSizeForLayout = (layoutType: LayoutType) => {
-    switch (layoutType) {
-        case LayoutType.Desktop:
-            return { rows: 40, columns: 60, cellSize: 20 }
-        case LayoutType.iPad:
-            return { rows: 30, columns: 30, cellSize: 30 }
-        case LayoutType.iPadSmall:
-            return { rows: 30, columns: 30, cellSize: 20 }
-        case LayoutType.PhonePortrait:
-            return { rows: 25, columns: 15, cellSize: 20 }
-        case LayoutType.PhoneLandscape:
-            return { rows: 15, columns: 25, cellSize: 20 }
+const getSize = (size: Size) => {
+    if (size.width < size.height) {
+        return getPortraitSize(size)
+    } else {
+        return getLandscapeSize(size)
     }
+}
+
+const getPortraitSize = (size: Size) => {
+    const padding = 50
+    const possibleCanvasSize = { width: (size.width - padding * 2), height: (size.height - padding * 2) }
+    let cellSize = 40
+    let columns = Math.floor(possibleCanvasSize.width / cellSize)
+    if (columns > 40) {
+        columns = 40
+    }
+    if (columns < 15) {
+        const maxCellSize = Math.floor(possibleCanvasSize.width / 15)
+        cellSize = Math.min(maxCellSize, 20)
+        columns = 15
+    } else {
+        cellSize = Math.floor(possibleCanvasSize.width / columns)
+    }
+    const rows = Math.floor(possibleCanvasSize.height / cellSize)
+    return { rows, columns, cellSize }
+}
+
+const getLandscapeSize = (size: Size) => {
+    const padding = 50
+    const possibleCanvasSize = { width: (size.width - padding * 2), height: (size.height - padding * 2) }
+    let cellSize = 40
+    let rows = Math.floor(possibleCanvasSize.height / cellSize)
+    if (rows > 40) {
+        rows = 40
+    }
+    if (rows < 15) {
+        const maxCellSize = Math.floor(possibleCanvasSize.height / 15)
+        cellSize = Math.min(maxCellSize, 20)
+        rows = 15
+    } else {
+        cellSize = Math.floor(possibleCanvasSize.height / rows)
+    }
+    const columns = Math.floor(possibleCanvasSize.width / cellSize)
+    return { rows, columns, cellSize }
+}
+
+const getSizeForLayout = () => {
+    const windowSize = getWindowSize()
+    return getSize(windowSize)
 }
 
 interface IProps {
@@ -27,18 +64,14 @@ interface IProps {
 }
 
 const Canvas = ({ layoutType }: IProps) => {
-    const [won, setWon] = React.useState(true)
-    const size = React.useMemo(() => getSizeForLayout(layoutType), [layoutType])
+    const [won, setWon] = React.useState(false)
+    const size = React.useMemo(() => getSizeForLayout(), [])
     const controller = React.useMemo(() => new Controller(size.rows, size.columns, size.cellSize), [size])
     const gridCanvasRef = React.useRef<HTMLCanvasElement>(null)
     const characterCanvasRef = React.useRef<HTMLCanvasElement>(null)
 
     const canvasSize = controller.canvasSize
     const screenSize = controller.screenSize
-
-    // React.useEffect(() => {
-    //     setWon(false)
-    // }, [layoutType])
 
     const newLevel = React.useCallback(() => {
         controller.newLevel()
