@@ -44,7 +44,6 @@ export default class MazeRenderer {
     }
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position) {
-        // this.drawRectangle(ctx, start, '#15F46A')
         this.drawRectangle(ctx, end, `#E1219B`)
     }
 

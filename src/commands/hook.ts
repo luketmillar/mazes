@@ -2,8 +2,9 @@ import React from 'react'
 import Command from './BaseCommand'
 import Controller from '../controller/controller'
 import Character from './Character'
+import Save from './Save'
 
-const commands: Command[] = [Character]
+const commands: Command[] = [Character, Save]
 
 export const useKeyboardCommands = (controller: Controller) => {
     const onKeypress = React.useCallback((e: KeyboardEvent) => {

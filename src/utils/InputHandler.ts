@@ -69,9 +69,9 @@ export default class InputHandler {
     }
 
     public onMouseMove = (pixel: Pixel) => {
-        // if (!this.isDrawing) {
-        //     return
-        // }
+        if (!this.isDrawing) {
+            return
+        }
 
         let position = this.positionFromPixel(pixel)
         if (position === undefined) {

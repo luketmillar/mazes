@@ -46,7 +46,7 @@ export const useLayoutType = () => {
         return LayoutType.PhonePortrait
     } else if (size.height < 400) {
         return LayoutType.PhoneLandscape
-    } else if (size.width <= 1000 || size.height <= 1000) {
+    } else if (size.width <= 1000 || size.height <= 900) {
         return LayoutType.iPadSmall
     } else if (size.width <= 1200) {
         return LayoutType.iPad

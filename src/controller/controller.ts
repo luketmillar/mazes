@@ -104,14 +104,18 @@ export default class Controller extends Subscribable<ControllerEvent> {
         return cell.links.some(link => link.row === nextCell.row && link.column === nextCell.column)
     }
 
-    public drawMaze(ctx: CanvasRenderingContext2D) {
-        this.renderer.clear(ctx)
+    public drawMaze(ctx: CanvasRenderingContext2D, clear = true) {
+        if (clear) {
+            this.renderer.clear(ctx)
+        }
         this.renderer.draw(ctx)
         this.renderer.drawStartEnd(ctx, this.maze.start, this.maze.end)
     }
 
-    public drawCharacter(ctx: CanvasRenderingContext2D) {
-        this.renderer.clear(ctx)
+    public drawCharacter(ctx: CanvasRenderingContext2D, clear = true) {
+        if (clear) {
+            this.renderer.clear(ctx)
+        }
         this.renderer.drawCharacter(ctx, this.character)
     }
 
