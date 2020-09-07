@@ -11,9 +11,9 @@ import { Size } from '../utils/Types'
 const getSize = (size: Size, layoutType: LayoutType) => {
     let clippedSize = size
     const aspectRatio = size.width / size.height
-    if (aspectRatio < 0.5) {
+    if (aspectRatio < 0.7) {
         clippedSize = { width: size.width, height: size.width * 1.5 }
-    } else if (aspectRatio > 2) {
+    } else if (aspectRatio > 1.7) {
         clippedSize = { height: size.height, width: size.height * 1.5 }
     }
     if (clippedSize.width < clippedSize.height) {
