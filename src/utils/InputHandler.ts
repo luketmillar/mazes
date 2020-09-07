@@ -100,8 +100,9 @@ export default class InputHandler {
 
     private positionFromPixel = (sceenPixel: Pixel): Position | undefined => {
         const canvasPosition = { x: sceenPixel.x - this.canvasRect!.x, y: sceenPixel.y - this.canvasRect!.y }
-        let column = Math.floor(canvasPosition.x / this.cellSize)
-        let row = Math.floor(canvasPosition.y / this.cellSize)
+        const screenCellSize = this.cellSize / window.devicePixelRatio
+        let column = Math.floor(canvasPosition.x / screenCellSize)
+        let row = Math.floor(canvasPosition.y / screenCellSize)
         if (row < 0) {
             row = 0
         }
