@@ -1,5 +1,20 @@
 import BaseCommand from './BaseCommand'
 import Controller from '../controller/controller'
+import { getLayoutType, getWindowSize, LayoutType } from '../components/useLayout'
+
+const getFontSize = () => {
+    const layoutType = getLayoutType(getWindowSize())
+    switch (layoutType) {
+        case LayoutType.Desktop:
+        case LayoutType.iPad:
+            return 50
+        case LayoutType.iPadSmall:
+            return 40
+        case LayoutType.PhonePortrait:
+        case LayoutType.PhoneLandscape:
+            return 30
+    }
+}
 
 class Save extends BaseCommand {
     public matches(controller: Controller, e: KeyboardEvent) {
@@ -37,7 +52,7 @@ class Save extends BaseCommand {
         controller.drawCharacter(ctx, false)
         controller.drawEnd(ctx, false)
         ctx.fillStyle = '#fff'
-        ctx.font = "bold 50px Montserrat"
+        ctx.font = `bold ${getFontSize()}px Montserrat`
         ctx.shadowOffsetX = 0
         ctx.shadowOffsetY = 0
         ctx.shadowColor = "rgba(0,0,0,1)"

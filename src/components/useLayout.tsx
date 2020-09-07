@@ -3,7 +3,7 @@ import React from 'react'
 type Size = { width: number, height: number }
 type WindowSizeCallback = (size: Size) => void
 
-const getWindowSize = () => ({ width: window.innerWidth, height: window.innerHeight })
+export const getWindowSize = () => ({ width: window.innerWidth, height: window.innerHeight })
 
 class WindowResizeListener {
     private subscriptions: WindowSizeCallback[] = []
@@ -42,6 +42,10 @@ export enum LayoutType {
 }
 export const useLayoutType = () => {
     const size = useWindowSize()
+    return getLayoutType(size)
+}
+
+export const getLayoutType = (size: Size) => {
     if (size.width < 400) {
         return LayoutType.PhonePortrait
     } else if (size.height < 400) {
