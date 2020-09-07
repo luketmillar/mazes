@@ -45,7 +45,7 @@ const getButtonFontSize = (layoutType: LayoutType) => {
 
 const Winner = ({ nextLevel, controller }: { nextLevel: () => void, controller: Controller }) => {
     const layoutType = useLayoutType()
-    const { width, height } = controller.canvasSize
+    const { width, height } = controller.screenSize
     const url = React.useMemo(() => {
         return Save.getImageUrl(controller)
     }, [controller])
