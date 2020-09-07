@@ -23,12 +23,12 @@ const calcAngleDegrees = (x: number, y: number) => {
 
 class SwipeGestureRecognizer {
     private readonly start: Pixel
-    private lastPixel: Pixel
+    private readonly startTime: number
     private lastDistance: number = 0
     private swipeDirection?: Direction
     constructor(pixel: Pixel) {
         this.start = pixel
-        this.lastPixel = pixel
+        this.startTime = performance.now()
     }
 
     public onMove(pixel: Pixel) {
@@ -55,11 +55,14 @@ class SwipeGestureRecognizer {
             }
         }
         this.lastDistance = distance
-        this.lastPixel = pixel
         return true
     }
 
     public onEnd() {
+        const endTime = performance.now()
+        if (endTime - this.startTime > 1000) {
+            return undefined
+        }
         return this.swipeDirection
     }
 
