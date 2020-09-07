@@ -27,7 +27,7 @@ interface IProps {
 }
 
 const Canvas = ({ layoutType }: IProps) => {
-    const [won, setWon] = React.useState(false)
+    const [won, setWon] = React.useState(true)
     const size = React.useMemo(() => getSizeForLayout(layoutType), [layoutType])
     const controller = React.useMemo(() => new Controller(size.rows, size.columns, size.cellSize), [size])
     const gridCanvasRef = React.useRef<HTMLCanvasElement>(null)
