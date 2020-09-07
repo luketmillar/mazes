@@ -33,7 +33,12 @@ const Canvas = ({ layoutType }: IProps) => {
     const gridCanvasRef = React.useRef<HTMLCanvasElement>(null)
     const characterCanvasRef = React.useRef<HTMLCanvasElement>(null)
 
-    const { width, height } = controller.canvasSize
+    const canvasSize = controller.canvasSize
+    const screenSize = controller.screenSize
+
+    React.useEffect(() => {
+        setWon(false)
+    }, [layoutType])
 
     const newLevel = React.useCallback(() => {
         controller.newLevel()
@@ -87,12 +92,12 @@ const Canvas = ({ layoutType }: IProps) => {
     }, [controller])
     useKeyboardCommands(controller)
 
-    return <div style={{ width, height, position: 'relative' }}>
+    return <div style={{ width: screenSize.width, height: screenSize.height, position: 'relative' }}>
         <Stacked>
-            <canvas ref={gridCanvasRef} width={width} height={height} />
+            <canvas style={{ width: screenSize.width, height: screenSize.height }} ref={gridCanvasRef} width={canvasSize.width} height={canvasSize.height} />
         </Stacked>
         <Stacked>
-            <canvas ref={characterCanvasRef} width={width} height={height} />
+            <canvas style={{ width: screenSize.width, height: screenSize.height }} ref={characterCanvasRef} width={canvasSize.width} height={canvasSize.height} />
         </Stacked>
         <Stacked>
             <InputLayer controller={controller} />

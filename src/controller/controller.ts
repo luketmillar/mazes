@@ -26,7 +26,7 @@ export default class Controller extends Subscribable<ControllerEvent> {
         super()
         this.rows = rows
         this.columns = columns
-        this.cellSize = cellSize
+        this.cellSize = cellSize * window.devicePixelRatio
         this.maze = new Maze(this.rows, this.columns)
         this.renderer = new MazeRenderer(this.maze, this.cellSize)
         this.character = new Character(this.maze.start.row, this.maze.start.column)
@@ -42,7 +42,7 @@ export default class Controller extends Subscribable<ControllerEvent> {
     public mazeSize(rows: number, columns: number, cellSize: number) {
         this.rows = rows
         this.columns = columns
-        this.cellSize = cellSize
+        this.cellSize = cellSize * window.devicePixelRatio
     }
 
     public newLevel() {
@@ -128,6 +128,10 @@ export default class Controller extends Subscribable<ControllerEvent> {
 
     public get canvasSize() {
         return { width: this.renderer.width, height: this.renderer.height }
+    }
+
+    public get screenSize() {
+        return { width: this.canvasSize.width / window.devicePixelRatio, height: this.canvasSize.height / window.devicePixelRatio }
     }
 
     public tickTime(timestamp: number) {
