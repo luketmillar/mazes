@@ -22,9 +22,8 @@ function App() {
           <Canvas layoutType={layoutType} />
         </div>
       </div>
-      <div style={{ zIndex: 100, width: '100%', padding: '0 60px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'white', fontWeight: 800, fontSize: 32, height: 100 }}>
-        <div>amazed.fun</div>
-        <a style={{ color: 'white', fontWeight: 500, fontSize: 24 }} href="https://twitter.com/ltm" target="_window">by @ltm</a>
+      <div style={{ zIndex: 100, padding: '0 60px', height: 100, display: 'flex', alignItems: 'center' }}>
+        <a style={{ backgroundColor: '#E1219B', padding: '5px 10px', color: 'white', fontWeight: 500, fontSize: 16 }} href="https://twitter.com/ltm" target="_window">@ltm</a>
       </div>
       <div style={{ visibility: 'hidden', fontWeight: 'bold', fontFamily: "Montserrat" }}>amazed.fun</div>
     </>
