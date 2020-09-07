@@ -9,12 +9,13 @@ import Winner from './Winner'
 import { Size } from '../utils/Types'
 
 const getSize = (size: Size, layoutType: LayoutType) => {
-    let clippedSize = size
-    const aspectRatio = size.width / size.height
+    const paddedSize = { ...size, height: size.height - 100 }
+    let clippedSize = paddedSize
+    const aspectRatio = paddedSize.width / paddedSize.height
     if (aspectRatio < 0.7) {
-        clippedSize = { width: size.width, height: size.width * 1.5 }
+        clippedSize = { width: paddedSize.width, height: paddedSize.width * 1.5 }
     } else if (aspectRatio > 1.7) {
-        clippedSize = { height: size.height, width: size.height * 1.5 }
+        clippedSize = { height: paddedSize.height, width: paddedSize.height * 1.5 }
     }
     if (clippedSize.width < clippedSize.height) {
         return getPortraitSize(clippedSize, layoutType)
