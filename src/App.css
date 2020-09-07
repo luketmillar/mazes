@@ -6,6 +6,10 @@ body {
   background-color: #222;
   color: #fff;
   font-family: 'Montserrat';
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
 }
 
 .menu {
