@@ -22,6 +22,7 @@ function App() {
           <Canvas layoutType={layoutType} />
         </div>
       </div>
+      <div style={{ visibility: 'hidden', fontWeight: 'bold', fontFamily: "Montserrat" }}>amazed.fun</div>
     </>
   )
 }

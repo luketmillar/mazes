@@ -43,8 +43,8 @@ export default class MazeRenderer {
         return this.grid.rowCount * this.cellSize
     }
 
-    public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position) {
-        this.drawRectangle(ctx, start, `#14AC4E`)
+    public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position, overlay = false) {
+        this.drawRectangle(ctx, start, overlay ? '#15F46A' : `#14AC4E`)
         this.drawRectangle(ctx, end, `#E1219B`)
     }
 

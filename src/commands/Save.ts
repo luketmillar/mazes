@@ -12,7 +12,7 @@ const getFontSize = () => {
             return 40 * window.devicePixelRatio
         case LayoutType.PhonePortrait:
         case LayoutType.PhoneLandscape:
-            return 30 * window.devicePixelRatio
+            return 25 * window.devicePixelRatio
     }
 }
 
@@ -39,30 +39,26 @@ class Save extends BaseCommand {
     }
     public getImageUrl(controller: Controller) {
         const canvas = document.createElement("canvas")
-        canvas.width = controller.canvasSize.width + 40
-        canvas.height = controller.canvasSize.height + 40
+        const padding = 20
+        const labelHeight = 110
+        canvas.width = controller.canvasSize.width + padding * 2
+        canvas.height = controller.canvasSize.height + padding * 2 + labelHeight
         const ctx = canvas.getContext("2d")
         if (ctx == null) {
             return undefined
         }
         ctx.fillStyle = '#222'
-        ctx.fillRect(0, 0, controller.canvasSize.width + 40, controller.canvasSize.height + 40)
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
         ctx.setTransform(1, 0, 0, 1, 20, 20)
         controller.drawMaze(ctx, false)
         controller.drawCharacter(ctx, false)
         controller.drawEnd(ctx, false)
         ctx.fillStyle = '#fff'
-        ctx.font = `bold ${getFontSize()}px "Arial Black", Gadget, sans-serif`
-        ctx.shadowOffsetX = 0
-        ctx.shadowOffsetY = 0
-        ctx.shadowColor = "rgba(0,0,0,1)"
-        ctx.shadowBlur = 20
-        ctx.fillText("amazed.fun", controller.renderer.cellSize, controller.canvasSize.height - controller.renderer.cellSize * 1.8)
-        ctx.fillText("amazed.fun", controller.renderer.cellSize, controller.canvasSize.height - controller.renderer.cellSize * 1.8)
-        ctx.fillText("amazed.fun", controller.renderer.cellSize, controller.canvasSize.height - controller.renderer.cellSize * 1.8)
-        ctx.font = `${getFontSize() / 2}px "Arial Black", Gadget, sans-serif`
-        ctx.fillText("by @ltm", controller.renderer.cellSize + 10, controller.canvasSize.height - controller.renderer.cellSize)
-        ctx.fillText("by @ltm", controller.renderer.cellSize + 10, controller.canvasSize.height - controller.renderer.cellSize)
+        ctx.font = `bold ${getFontSize()}px "Montserrat"`
+        ctx.fillText("amazed.fun", 30, canvas.height - 60)
+        ctx.font = `${getFontSize() / 2}px "Montserrat"`
+        ctx.textAlign = 'right'
+        ctx.fillText("by @ltm", canvas.width - 80, canvas.height - 70)
         return canvas.toDataURL("image/png")
     }
 }

@@ -123,7 +123,7 @@ export default class Controller extends Subscribable<ControllerEvent> {
         if (clear) {
             this.renderer.clear(ctx)
         }
-        this.renderer.drawStartEnd(ctx, this.maze.start, this.maze.end)
+        this.renderer.drawStartEnd(ctx, this.maze.start, this.maze.end, true)
     }
 
     public get canvasSize() {
