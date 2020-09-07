@@ -1,22 +1,41 @@
 import React from 'react'
-import * as Algorithms from '../models/MazeAlgorithms/Directory'
 import { LayoutType } from './useLayout'
 import Controller, { ControllerEvent } from '../controller/controller'
 import { useKeyboardCommands } from '../commands/hook'
 import rafManager from '../utils/RafManager'
+import InputLayer from './InputLayer'
+import CharacterTool from '../tools/CharacterTool'
 
+const getSizeForLayout = (layoutType: LayoutType) => {
+    switch (layoutType) {
+        case LayoutType.Desktop:
+            return { rows: 40, columns: 60, cellSize: 20 }
+        case LayoutType.iPad:
+            return { rows: 30, columns: 30, cellSize: 30 }
+        case LayoutType.iPadSmall:
+            return { rows: 30, columns: 30, cellSize: 20 }
+        case LayoutType.PhonePortrait:
+            return { rows: 25, columns: 15, cellSize: 20 }
+        case LayoutType.PhoneLandscape:
+            return { rows: 15, columns: 25, cellSize: 20 }
+    }
+}
 
 interface IProps {
-    algorithmType: Algorithms.Type
     layoutType: LayoutType
 }
 
-const Canvas = ({ algorithmType, layoutType }: IProps) => {
-    const controller = React.useMemo(() => new Controller(), [])
+const Canvas = ({ layoutType }: IProps) => {
+    const size = React.useMemo(() => getSizeForLayout(layoutType), [layoutType])
+    const controller = React.useMemo(() => new Controller(size.rows, size.columns, size.cellSize), [size])
     const gridCanvasRef = React.useRef<HTMLCanvasElement>(null)
     const characterCanvasRef = React.useRef<HTMLCanvasElement>(null)
 
     const { width, height } = controller.canvasSize
+
+    React.useEffect(() => {
+        controller.mazeSize(size.rows, size.columns, size.cellSize)
+    }, [controller, size])
 
     React.useEffect(() => {
         return controller.subscribe((event: ControllerEvent) => {
@@ -47,6 +66,13 @@ const Canvas = ({ algorithmType, layoutType }: IProps) => {
         })
     }, [controller])
     React.useEffect(() => {
+        if (controller.toolStack.currentTool !== undefined) {
+            return
+        }
+        // initialize a new toolstack
+        controller.toolStack.replace(new CharacterTool())
+    }, [controller.toolStack])
+    React.useEffect(() => {
         const onRaf = (timestamp: number) => {
             controller.tickTime(timestamp)
         }
@@ -60,6 +86,9 @@ const Canvas = ({ algorithmType, layoutType }: IProps) => {
         </Stacked>
         <Stacked>
             <canvas ref={characterCanvasRef} width={width} height={height} />
+        </Stacked>
+        <Stacked>
+            <InputLayer controller={controller} />
         </Stacked>
     </div>
 }

@@ -1,12 +1,8 @@
 import Direction from "../models/Direction"
 import Maze from "../models/Maze"
-import Character from "../models/Chracter"
+import Character from "../models/Character"
 import { Position } from "../models/Position"
-
-type Pixel = {
-    x: number
-    y: number
-}
+import { Pixel } from "../utils/Types"
 
 export default class MazeRenderer {
     public cellSize = 20
@@ -53,8 +49,10 @@ export default class MazeRenderer {
     }
 
     public drawCharacter(ctx: CanvasRenderingContext2D, character: Character) {
+        character.paths.forEach(path => {
+            this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.4)
+        })
         this.drawRectangle(ctx, character.position, '#15F46A')
-        // this.drawPath(ctx, character.history, '#15F46A', 1)
     }
 
     public setTime(timestamp: number) {
@@ -73,10 +71,22 @@ export default class MazeRenderer {
         ctx.beginPath()
         ctx.strokeStyle = color
         ctx.lineWidth = width
-        path.forEach((cell, i) => {
-            const cellBounds = this.getCellBounds(cell)
+        path.forEach((position, i) => {
+            const cellBounds = this.getCellBounds(position)
             if (i === 0) {
-                ctx.moveTo(cellBounds.center, cellBounds.middle)
+                if (path.length > 1) {
+                    const currentCenter = this.getCenterPixel(position)
+                    const nextCenter = this.getCenterPixel(path[i + 1])
+                    const extension = getPathExtension(currentCenter, nextCenter, width)
+                    ctx.moveTo(cellBounds.center + extension.x, cellBounds.middle + extension.y)
+                } else {
+                    ctx.moveTo(cellBounds.center, cellBounds.middle)
+                }
+            } else if (i === path.length - 1 && i > 0) {
+                const currentCenter = this.getCenterPixel(position)
+                const nextCenter = this.getCenterPixel(path[i - 1])
+                const extension = getPathExtension(currentCenter, nextCenter, width)
+                ctx.lineTo(cellBounds.center + extension.x, cellBounds.middle + extension.y)
             } else {
                 ctx.lineTo(cellBounds.center, cellBounds.middle)
             }
@@ -103,6 +113,10 @@ export default class MazeRenderer {
             middle: (position.row + 0.5) * this.cellSize
         }
     }
+    private getCenterPixel = (position: Position) => {
+        const { center, middle } = this.getCellBounds(position)
+        return { x: center, y: middle }
+    }
     private drawLine = (ctx: CanvasRenderingContext2D, from: Pixel, to: Pixel) => {
         ctx.beginPath()
         ctx.moveTo(from.x, from.y)
@@ -110,4 +124,19 @@ export default class MazeRenderer {
         ctx.stroke()
         ctx.closePath()
     }
+}
+
+const getPathExtension = (end: Pixel, next: Pixel, width: number) => {
+    if (end.x < next.x) {
+        return { x: -width / 2, y: 0 }
+    } else if (end.x > next.x) {
+        return { x: width / 2, y: 0 }
+    } else if (end.y > next.y) {
+        return { x: 0, y: width / 2 }
+    } else if (end.y < next.y) {
+        return {
+            x: 0, y: -width / 2
+        }
+    }
+    return { x: 0, y: 0 }
 }

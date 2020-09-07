@@ -36,12 +36,18 @@ export const useWindowSize = () => {
 export enum LayoutType {
     Desktop = 'desktop',
     iPad = 'ipad',
-    Phone = 'phone'
+    iPadSmall = 'ipad-small',
+    PhoneLandscape = 'phone-landscape',
+    PhonePortrait = 'phone-portrait'
 }
 export const useLayoutType = () => {
     const size = useWindowSize()
-    if (size.width < 400 || size.height < 400) {
-        return LayoutType.Phone
+    if (size.width < 400) {
+        return LayoutType.PhonePortrait
+    } else if (size.height < 400) {
+        return LayoutType.PhoneLandscape
+    } else if (size.width <= 1000 || size.height <= 1000) {
+        return LayoutType.iPadSmall
     } else if (size.width <= 1200) {
         return LayoutType.iPad
     } else {

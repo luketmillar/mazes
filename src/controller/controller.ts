@@ -1,9 +1,10 @@
-import Character from "../models/Chracter"
+import Character from "../models/Character"
 import Maze from "../models/Maze"
 import MazeRenderer from "../views/MazeRenderer"
 import Direction from "../models/Direction"
 import Subscribable, { Fn } from "../utils/Subscribable"
 import { Position } from "../models/Position"
+import ToolStack from "../tools/ToolStack"
 
 export enum ControllerEvent {
     Maze,
@@ -13,15 +14,23 @@ export enum ControllerEvent {
 }
 
 export default class Controller extends Subscribable<ControllerEvent> {
-    private maze: Maze
-    private character: Character
+    public maze: Maze
+    public character: Character
     public renderer: MazeRenderer
+    public readonly toolStack: ToolStack
+    private rows: number
+    private columns: number
+    private cellSize: number
 
-    constructor() {
+    constructor(rows: number, columns: number, cellSize: number) {
         super()
-        this.maze = new Maze(20, 40)
-        this.renderer = new MazeRenderer(this.maze, 40)
+        this.rows = rows
+        this.columns = columns
+        this.cellSize = cellSize
+        this.maze = new Maze(this.rows, this.columns)
+        this.renderer = new MazeRenderer(this.maze, this.cellSize)
         this.character = new Character(this.maze.start.row, this.maze.start.column)
+        this.toolStack = new ToolStack(this)
     }
 
     public subscribe(fn: Fn<ControllerEvent>) {
@@ -30,9 +39,15 @@ export default class Controller extends Subscribable<ControllerEvent> {
         return unsubscribe
     }
 
+    public mazeSize(rows: number, columns: number, cellSize: number) {
+        this.rows = rows
+        this.columns = columns
+        this.cellSize = cellSize
+    }
+
     public newLevel() {
-        this.maze = new Maze(30, 40)
-        this.renderer = new MazeRenderer(this.maze, 40)
+        this.maze = new Maze(this.rows, this.columns)
+        this.renderer = new MazeRenderer(this.maze, this.cellSize)
         this.character = new Character(this.maze.start.row, this.maze.start.column)
         this.notify(ControllerEvent.All)
     }
@@ -83,6 +98,12 @@ export default class Controller extends Subscribable<ControllerEvent> {
         this.moveCharacter(cell)
     }
 
+    public canMoveTo(position: Position) {
+        const cell = this.currentCell
+        const nextCell = this.maze.grid.getCell(position.row, position.column)!
+        return cell.links.some(link => link.row === nextCell.row && link.column === nextCell.column)
+    }
+
     public drawMaze(ctx: CanvasRenderingContext2D) {
         this.renderer.clear(ctx)
         this.renderer.draw(ctx)
@@ -109,7 +130,7 @@ export default class Controller extends Subscribable<ControllerEvent> {
             // cant move character while animating
             return
         }
-        this.character.setPosition(position)
+        this.character.moveTo(position, true)
         this.notify(ControllerEvent.Character)
         this.checkWin()
     }

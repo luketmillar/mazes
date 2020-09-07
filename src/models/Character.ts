@@ -3,26 +3,40 @@ import { Position, getDistance } from "./Position"
 export default class Character {
     public row: number
     public column: number
-    public readonly history: Position[]
+    public readonly paths: Position[][]
+    private get path() {
+        return this.paths[this.paths.length - 1]
+    }
 
     private animation: Animation | undefined
 
     constructor(row: number, column: number) {
         this.row = row
         this.column = column
-        this.history = [this.position]
+        this.paths = [[this.position]]
     }
 
-    public setPosition(position: Position) {
-        const currentPositon = this.position
-        const distance = getDistance(position, currentPositon)
+    public moveTo(position: Position, animate = false) {
+        if (animate) {
+            const currentPositon = this.position
+            const distance = getDistance(position, currentPositon)
+            this.animation = new Animation(currentPositon, position, distance * 50)
+            this.animation.start(performance.now())
+        }
 
-        this.animation = new Animation(currentPositon, position, distance * 50)
-        this.animation.start(performance.now())
-
+        if (this.row === position.row && this.column === position.column) {
+            // no change
+            return
+        }
         this.row = position.row
         this.column = position.column
-        this.history.push(this.position)
+        this.path.push(position)
+    }
+
+    public jumpTo(position: Position) {
+        this.row = position.row
+        this.column = position.column
+        this.paths.push([position])
     }
 
     public get position() {
@@ -45,6 +59,10 @@ export default class Character {
 
     public get isAnimating() {
         return this.animation !== undefined
+    }
+
+    public isInPath(position: Position) {
+        return this.paths.some(path => path.some(p => p.row === position.row && p.column === position.column))
     }
 }
 
@@ -86,13 +104,19 @@ class Animation {
         const startRow = this.startPosition.row
         const endRow = this.endPosition.row
         const percentage = time / this.duration
-        return (endRow - startRow) * percentage + startRow
+        const easedPercentage = this.getEaseValue(percentage)
+        return (endRow - startRow) * easedPercentage + startRow
     }
 
     private getColumn(time: number) {
         const startColumn = this.startPosition.column
         const endColumn = this.endPosition.column
         const percentage = time / this.duration
-        return (endColumn - startColumn) * percentage + startColumn
+        const easedPercentage = this.getEaseValue(percentage)
+        return (endColumn - startColumn) * easedPercentage + startColumn
+    }
+
+    private getEaseValue = (x: number) => {
+        return x * x * x
     }
 }
