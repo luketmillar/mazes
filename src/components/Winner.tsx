@@ -58,7 +58,10 @@ const Winner = ({ nextLevel, controller }: { nextLevel: () => void, controller: 
                 <div style={{ display: 'flex' }}>
                     <a href={url} download="maze.png" style={{ fontSize: getButtonFontSize(layoutType) }}>Save proof</a>
                     <div style={{ width: 20 }} />
-                    <button onClick={nextLevel} style={{ fontSize: getButtonFontSize(layoutType) }}>New level</button>
+                    <button onTouchEnd={e => {
+                        e.stopPropagation()
+                        nextLevel()
+                    }} onClick={nextLevel} style={{ fontSize: getButtonFontSize(layoutType) }}>New level</button>
                 </div>
             </div>
         </div>

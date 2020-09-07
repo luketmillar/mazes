@@ -1,5 +1,5 @@
 import React from 'react'
-import { LayoutType, getWindowSize } from './useLayout'
+import { LayoutType, getWindowSize, getLayoutType } from './useLayout'
 import Controller, { ControllerEvent } from '../controller/controller'
 import { useKeyboardCommands } from '../commands/hook'
 import rafManager from '../utils/RafManager'
@@ -8,26 +8,28 @@ import CharacterTool from '../tools/CharacterTool'
 import Winner from './Winner'
 import { Size } from '../utils/Types'
 
-const getSize = (size: Size) => {
+const getSize = (size: Size, layoutType: LayoutType) => {
     if (size.width < size.height) {
-        return getPortraitSize(size)
+        return getPortraitSize(size, layoutType)
     } else {
-        return getLandscapeSize(size)
+        return getLandscapeSize(size, layoutType)
     }
 }
 
-const getPortraitSize = (size: Size) => {
-    const padding = 50
+const getPortraitSize = (size: Size, layoutType: LayoutType) => {
+    const isPhone = layoutType === LayoutType.PhonePortrait || layoutType === LayoutType.PhoneLandscape
+    const padding = isPhone ? 20 : 50
     const possibleCanvasSize = { width: (size.width - padding * 2), height: (size.height - padding * 2) }
+    const minColumns = isPhone ? 12 : 15
     let cellSize = 40
     let columns = Math.floor(possibleCanvasSize.width / cellSize)
     if (columns > 40) {
         columns = 40
     }
-    if (columns < 15) {
-        const maxCellSize = Math.floor(possibleCanvasSize.width / 15)
-        cellSize = Math.min(maxCellSize, 20)
-        columns = 15
+    if (columns < minColumns) {
+        const maxCellSize = Math.floor(possibleCanvasSize.width / minColumns)
+        cellSize = maxCellSize
+        columns = minColumns
     } else {
         cellSize = Math.floor(possibleCanvasSize.width / columns)
     }
@@ -35,18 +37,20 @@ const getPortraitSize = (size: Size) => {
     return { rows, columns, cellSize }
 }
 
-const getLandscapeSize = (size: Size) => {
-    const padding = 50
+const getLandscapeSize = (size: Size, layoutType: LayoutType) => {
+    const isPhone = layoutType === LayoutType.PhonePortrait || layoutType === LayoutType.PhoneLandscape
+    const padding = isPhone ? 20 : 50
     const possibleCanvasSize = { width: (size.width - padding * 2), height: (size.height - padding * 2) }
+    const minRows = isPhone ? 12 : 15
     let cellSize = 40
     let rows = Math.floor(possibleCanvasSize.height / cellSize)
     if (rows > 40) {
         rows = 40
     }
-    if (rows < 15) {
-        const maxCellSize = Math.floor(possibleCanvasSize.height / 15)
-        cellSize = Math.min(maxCellSize, 20)
-        rows = 15
+    if (rows < minRows) {
+        const maxCellSize = Math.floor(possibleCanvasSize.height / minRows)
+        cellSize = maxCellSize
+        rows = minRows
     } else {
         cellSize = Math.floor(possibleCanvasSize.height / rows)
     }
@@ -56,7 +60,8 @@ const getLandscapeSize = (size: Size) => {
 
 const getSizeForLayout = () => {
     const windowSize = getWindowSize()
-    return getSize(windowSize)
+    const layoutType = getLayoutType(windowSize)
+    return getSize(windowSize, layoutType)
 }
 
 interface IProps {

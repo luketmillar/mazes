@@ -52,14 +52,17 @@ class Save extends BaseCommand {
         controller.drawCharacter(ctx, false)
         controller.drawEnd(ctx, false)
         ctx.fillStyle = '#fff'
-        ctx.font = `bold ${getFontSize()}px Montserrat`
+        ctx.font = `bold ${getFontSize()}px "Arial Black", Gadget, sans-serif`
         ctx.shadowOffsetX = 0
         ctx.shadowOffsetY = 0
         ctx.shadowColor = "rgba(0,0,0,1)"
         ctx.shadowBlur = 20
-        ctx.fillText("amazed.fun", 20, controller.canvasSize.height - 20)
-        ctx.fillText("amazed.fun", 20, controller.canvasSize.height - 20)
-        ctx.fillText("amazed.fun", 20, controller.canvasSize.height - 20)
+        ctx.fillText("amazed.fun", controller.renderer.cellSize, controller.canvasSize.height - controller.renderer.cellSize * 1.8)
+        ctx.fillText("amazed.fun", controller.renderer.cellSize, controller.canvasSize.height - controller.renderer.cellSize * 1.8)
+        ctx.fillText("amazed.fun", controller.renderer.cellSize, controller.canvasSize.height - controller.renderer.cellSize * 1.8)
+        ctx.font = `${getFontSize() / 2}px "Arial Black", Gadget, sans-serif`
+        ctx.fillText("by @ltm", controller.renderer.cellSize + 10, controller.canvasSize.height - controller.renderer.cellSize)
+        ctx.fillText("by @ltm", controller.renderer.cellSize + 10, controller.canvasSize.height - controller.renderer.cellSize)
         return canvas.toDataURL("image/png")
     }
 }
