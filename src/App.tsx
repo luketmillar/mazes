@@ -22,7 +22,7 @@ function App() {
           <Canvas layoutType={layoutType} />
         </div>
       </div>
-      <div style={{ zIndex: 100, padding: '0 60px', height: 100, display: 'flex', alignItems: 'center' }}>
+      <div style={{ zIndex: 100, padding: '0 20px', height: 60, display: 'flex', alignItems: 'center' }}>
         <a style={{ backgroundColor: '#E1219B', padding: '5px 10px', color: 'white', fontWeight: 500, fontSize: 16 }} href="https://twitter.com/ltm" target="_window">@ltm</a>
       </div>
       <div style={{ visibility: 'hidden', fontWeight: 'bold', fontFamily: "Montserrat" }}>amazed.fun</div>

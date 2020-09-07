@@ -9,7 +9,7 @@ import Winner from './Winner'
 import { Size } from '../utils/Types'
 
 const getSize = (size: Size, layoutType: LayoutType) => {
-    const paddedSize = { ...size, height: size.height - 100 }
+    const paddedSize = { ...size, height: size.height - 60 }
     let clippedSize = paddedSize
     const aspectRatio = paddedSize.width / paddedSize.height
     if (aspectRatio < 0.7) {
