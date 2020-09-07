@@ -28,6 +28,7 @@ a, button {
   margin: unset;
   text-align: left;
   text-decoration: none;
+  cursor: pointer;
 }
 
 a, button {
