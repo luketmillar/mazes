@@ -7,12 +7,12 @@ const getFontSize = () => {
     switch (layoutType) {
         case LayoutType.Desktop:
         case LayoutType.iPad:
-            return 50
+            return 50 * window.devicePixelRatio
         case LayoutType.iPadSmall:
-            return 40
+            return 40 * window.devicePixelRatio
         case LayoutType.PhonePortrait:
         case LayoutType.PhoneLandscape:
-            return 30
+            return 30 * window.devicePixelRatio
     }
 }
 
