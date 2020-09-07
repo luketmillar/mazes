@@ -119,6 +119,13 @@ export default class Controller extends Subscribable<ControllerEvent> {
         this.renderer.drawCharacter(ctx, this.character)
     }
 
+    public drawEnd(ctx: CanvasRenderingContext2D, clear = true) {
+        if (clear) {
+            this.renderer.clear(ctx)
+        }
+        this.renderer.drawStartEnd(ctx, this.maze.start, this.maze.end)
+    }
+
     public get canvasSize() {
         return { width: this.renderer.width, height: this.renderer.height }
     }

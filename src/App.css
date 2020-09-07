@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: #222;
   color: #fff;
@@ -6,4 +10,34 @@ body {
 
 .menu {
   display: none;
+}
+
+a, button {
+  background-color: unset;
+  border: unset;
+  user-select: none;
+  outline: unset;
+  font-weight: unset;
+  font-family: unset;
+  padding: unset;
+  margin: unset;
+  text-align: left;
+  text-decoration: none;
+}
+
+a, button {
+  background-color: #E1219B;
+  color: white;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 5px;
+  text-align: center;
+}
+
+a:hover, button:hover {
+  background-color: #F43FB2;
+}
+
+a:active, button:active {
+  background-color: #B81E80;
 }

@@ -5,6 +5,7 @@ import { useKeyboardCommands } from '../commands/hook'
 import rafManager from '../utils/RafManager'
 import InputLayer from './InputLayer'
 import CharacterTool from '../tools/CharacterTool'
+import Winner from './Winner'
 
 const getSizeForLayout = (layoutType: LayoutType) => {
     switch (layoutType) {
@@ -26,12 +27,18 @@ interface IProps {
 }
 
 const Canvas = ({ layoutType }: IProps) => {
+    const [won, setWon] = React.useState(false)
     const size = React.useMemo(() => getSizeForLayout(layoutType), [layoutType])
     const controller = React.useMemo(() => new Controller(size.rows, size.columns, size.cellSize), [size])
     const gridCanvasRef = React.useRef<HTMLCanvasElement>(null)
     const characterCanvasRef = React.useRef<HTMLCanvasElement>(null)
 
     const { width, height } = controller.canvasSize
+
+    const newLevel = React.useCallback(() => {
+        controller.newLevel()
+        setWon(false)
+    }, [controller])
 
     React.useEffect(() => {
         controller.mazeSize(size.rows, size.columns, size.cellSize)
@@ -59,7 +66,7 @@ const Canvas = ({ layoutType }: IProps) => {
                     return
                 }
                 case ControllerEvent.Win: {
-                    controller.newLevel()
+                    setWon(true)
                     return
                 }
             }
@@ -90,6 +97,9 @@ const Canvas = ({ layoutType }: IProps) => {
         <Stacked>
             <InputLayer controller={controller} />
         </Stacked>
+        {won && <Stacked>
+            <Winner nextLevel={newLevel} controller={controller} />
+        </Stacked>}
     </div>
 }
 

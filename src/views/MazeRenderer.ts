@@ -44,12 +44,13 @@ export default class MazeRenderer {
     }
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position) {
+        this.drawRectangle(ctx, start, `#14AC4E`)
         this.drawRectangle(ctx, end, `#E1219B`)
     }
 
     public drawCharacter(ctx: CanvasRenderingContext2D, character: Character) {
         character.paths.forEach(path => {
-            this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.4)
+            this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.3)
         })
         this.drawRectangle(ctx, character.position, '#15F46A')
     }
@@ -97,7 +98,7 @@ export default class MazeRenderer {
     private drawRectangle = (ctx: CanvasRenderingContext2D, position: Position, color: string) => {
         ctx.fillStyle = color
         const cellBounds = this.getCellBounds(position)
-        const size = this.cellSize * 0.5
+        const size = this.cellSize * 0.7
         ctx.fillRect(cellBounds.center - size / 2, cellBounds.middle - size / 2, size, size)
     }
     private getCellBounds = (position: Position) => {
