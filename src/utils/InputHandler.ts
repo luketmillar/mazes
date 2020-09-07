@@ -66,7 +66,7 @@ class SwipeGestureRecognizer {
     private getDirection(pixel: Pixel) {
         const diff = getPixelDiff(pixel, this.start)
         const angle = calcAngleDegrees(Math.abs(diff.x), Math.abs(diff.y))
-        if (angle > 20 && angle < 70) {
+        if (angle > 30 && angle < 60) {
             // ignore general diaganols
             return
         }
