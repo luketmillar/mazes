@@ -1,6 +1,7 @@
 import { Position } from "../models/Position"
 import Subscribable from "../utils/Subscribable"
 import Controller from "../controller/controller"
+import Direction from "../models/Direction"
 
 export default abstract class Tool extends Subscribable<void> {
     public static type: string
@@ -17,4 +18,5 @@ export default abstract class Tool extends Subscribable<void> {
     public abstract onStart(position: Position): void
     public abstract onMove(position: Position): void
     public abstract onEnd(position: Position): void
+    public abstract onSwipe(direction: Direction): void
 }

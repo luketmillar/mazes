@@ -2,6 +2,7 @@ import React from 'react'
 import InputHandler from '../utils/InputHandler'
 import { Position } from '../models/Position'
 import Controller, { ControllerEvent } from '../controller/controller'
+import Direction from '../models/Direction'
 
 
 const useInputHandler = (controller: Controller, inputRef: React.RefObject<HTMLDivElement>) => {
@@ -50,6 +51,7 @@ const useInputHandler = (controller: Controller, inputRef: React.RefObject<HTMLD
             onStart: (position: Position) => controller.toolStack.currentTool?.onStart(position),
             onMove: (position: Position) => controller.toolStack.currentTool?.onMove(position),
             onEnd: (position: Position) => controller.toolStack.currentTool?.onEnd(position),
+            onSwipe: (direction: Direction) => controller.toolStack.currentTool?.onSwipe(direction)
         })
     }, [controller.toolStack.currentTool, inputHandler, inputRef])
     return inputHandler

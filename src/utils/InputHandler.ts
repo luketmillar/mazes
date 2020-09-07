@@ -1,5 +1,5 @@
-import { Position, positionsAreEqual, Pixel, Callbacks } from './Types'
-
+import { Position, positionsAreEqual, Pixel, Callbacks, getPixelDistance, getPixelDiff } from './Types'
+import Direction from '../models/Direction'
 
 interface DownOptions {
     position: Position
@@ -15,6 +15,77 @@ enum InputEvent {
 
 interface IEventOptions {
     metaKey?: boolean
+}
+
+const calcAngleDegrees = (x: number, y: number) => {
+    return Math.atan2(y, x) * 180 / Math.PI
+}
+
+class SwipeGestureRecognizer {
+    private readonly start: Pixel
+    private lastPixel: Pixel
+    private lastDistance: number = 0
+    private swipeDirection?: Direction
+    constructor(pixel: Pixel) {
+        this.start = pixel
+        this.lastPixel = pixel
+    }
+
+    public onMove(pixel: Pixel) {
+        const distance = getPixelDistance(this.start, pixel)
+        const direction = this.getDirection(pixel)
+
+        if (this.swipeDirection === undefined) {
+            if (distance < 20) {
+                // dont start yet
+                return true
+            }
+            if (direction === undefined) {
+                return false
+            }
+            this.swipeDirection = direction
+        } else {
+            // make sure continuing in the right direction
+            if (direction !== this.swipeDirection) {
+                return false
+            }
+            // and getting farther away
+            if (distance < this.lastDistance) {
+                return false
+            }
+        }
+        this.lastDistance = distance
+        this.lastPixel = pixel
+        return true
+    }
+
+    public onEnd() {
+        return this.swipeDirection
+    }
+
+    private getDirection(pixel: Pixel) {
+        const diff = getPixelDiff(pixel, this.start)
+        const angle = calcAngleDegrees(Math.abs(diff.x), Math.abs(diff.y))
+        if (angle > 20 && angle < 70) {
+            // ignore general diaganols
+            return
+        }
+        if (Math.abs(diff.x) > Math.abs(diff.y)) {
+            // horizontal
+            if (diff.x < 0) {
+                return Direction.West
+            } else {
+                return Direction.East
+            }
+        } else {
+            // vertical
+            if (diff.y < 0) {
+                return Direction.North
+            } else {
+                return Direction.South
+            }
+        }
+    }
 }
 
 export default class InputHandler {
@@ -44,6 +115,7 @@ export default class InputHandler {
     private readonly columns: number = 0
     private readonly cellSize: number = 0
     private element: HTMLDivElement | undefined
+    private swipeGestureRecognizer?: SwipeGestureRecognizer
     constructor(rows: number, columns: number, cellSize: number) {
         this.rows = rows
         this.columns = columns
@@ -55,6 +127,7 @@ export default class InputHandler {
     }
 
     public onMouseDown = (pixel: Pixel, options?: IEventOptions) => {
+        this.swipeGestureRecognizer = new SwipeGestureRecognizer(pixel)
         const position = this.positionFromPixel(pixel)
         if (position === undefined) {
             return
@@ -69,6 +142,11 @@ export default class InputHandler {
     }
 
     public onMouseMove = (pixel: Pixel) => {
+        if (this.swipeGestureRecognizer !== undefined) {
+            if (!this.swipeGestureRecognizer!.onMove(pixel)) {
+                this.swipeGestureRecognizer = undefined
+            }
+        }
         if (!this.isDrawing) {
             return
         }
@@ -84,6 +162,11 @@ export default class InputHandler {
     }
 
     public onMouseUp = () => {
+        const swipeDirection = this.swipeGestureRecognizer?.onEnd()
+        this.swipeGestureRecognizer = undefined
+        if (swipeDirection !== undefined) {
+            this.notifySwipe(swipeDirection)
+        }
         if (this.lastPosition !== undefined) {
             this.notify(InputEvent.End, this.lastPosition)
         }
@@ -132,6 +215,11 @@ export default class InputHandler {
                     return
             }
         })
+    }
 
+    private notifySwipe = (direction: Direction) => {
+        this.subscriptions.forEach(s => {
+            s.onSwipe(direction)
+        })
     }
 }

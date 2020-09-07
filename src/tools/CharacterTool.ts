@@ -1,5 +1,6 @@
 import Tool from "./BaseTool"
 import { Position } from "../models/Position"
+import Direction from "../models/Direction"
 
 export default class CharacterTool extends Tool {
     public static type = 'character'
@@ -30,5 +31,18 @@ export default class CharacterTool extends Tool {
 
     public onEnd = (position: Position) => {
         this.isMoving = false
+    }
+
+    public onSwipe = (direction: Direction) => {
+        switch (direction) {
+            case Direction.North:
+                return this.controller.up()
+            case Direction.East:
+                return this.controller.right()
+            case Direction.South:
+                return this.controller.down()
+            case Direction.West:
+                return this.controller.left()
+        }
     }
 }
