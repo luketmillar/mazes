@@ -36,9 +36,9 @@ const Canvas = ({ layoutType }: IProps) => {
     const canvasSize = controller.canvasSize
     const screenSize = controller.screenSize
 
-    React.useEffect(() => {
-        setWon(false)
-    }, [layoutType])
+    // React.useEffect(() => {
+    //     setWon(false)
+    // }, [layoutType])
 
     const newLevel = React.useCallback(() => {
         controller.newLevel()
