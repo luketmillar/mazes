@@ -33,19 +33,30 @@ const useInputHandler = (controller: Controller, inputRef: React.RefObject<HTMLD
         e.stopPropagation()
         inputHandler.onTouchEnd()
     }, [inputHandler])
+    const handleTouchStart = React.useCallback((e: TouchEvent) => {
+        e.preventDefault()
+        if (e.touches.length !== 1) {
+            return
+        }
+        e.stopPropagation()
+        const touch = e.touches[0]
+        inputHandler.onTouchStart({ x: touch.clientX, y: touch.clientY })
+    }, [inputHandler])
     React.useEffect(() => {
         inputHandler.setElement(inputRef.current!)
         window.addEventListener('mousemove', handleMouseMove)
-        window.addEventListener('touchmove', handleTouchMove)
         window.addEventListener('mouseup', handleMouseUp)
+        window.addEventListener('touchstart', handleTouchStart)
+        window.addEventListener('touchmove', handleTouchMove)
         window.addEventListener('touchend', handleTouchEnd)
         return () => {
             window.removeEventListener('mousemove', handleMouseMove)
-            window.removeEventListener('touchmove', handleTouchMove)
             window.removeEventListener('mouseup', handleMouseUp)
+            window.removeEventListener('touchstart', handleTouchStart)
+            window.removeEventListener('touchmove', handleTouchMove)
             window.removeEventListener('touchend', handleTouchEnd)
         }
-    }, [handleMouseMove, handleMouseUp, handleTouchEnd, handleTouchMove, inputHandler, inputRef])
+    }, [handleMouseMove, handleMouseUp, handleTouchEnd, handleTouchMove, handleTouchStart, inputHandler, inputRef])
     React.useEffect(() => {
         return inputHandler.subscribe({
             onStart: (position: Position) => controller.toolStack.currentTool?.onStart(position),
@@ -82,16 +93,8 @@ const InputLayer = ({ controller }: IProps) => {
     const handleMouseDown = React.useCallback((e: React.MouseEvent) => {
         inputHandler.onMouseDown({ x: e.clientX, y: e.clientY }, { metaKey: e.metaKey })
     }, [inputHandler])
-    const handleTouchStart = React.useCallback((e: React.TouchEvent) => {
-        e.preventDefault()
-        if (e.touches.length !== 1) {
-            return
-        }
-        e.stopPropagation()
-        const touch = e.touches[0]
-        inputHandler.onTouchStart({ x: touch.clientX, y: touch.clientY })
-    }, [inputHandler])
-    return <div ref={inputRef} style={{ width: '100%', height: '100%' }} onMouseDown={handleMouseDown} onTouchStart={handleTouchStart} />
+
+    return <div ref={inputRef} style={{ width: '100%', height: '100%' }} onMouseDown={handleMouseDown} />
 }
 
 export default React.memo(InputLayer)
