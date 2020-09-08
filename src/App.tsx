@@ -1,10 +1,8 @@
 import React from 'react'
 import './App.css'
 import Canvas from './components/Canvas'
-import { useLayoutType } from './components/useLayout'
 
 function App() {
-  const layoutType = useLayoutType()
   React.useEffect(() => {
     const preventBehavior = (e: TouchEvent) => {
       e.preventDefault()
@@ -19,7 +17,7 @@ function App() {
     <>
       <div style={{ zIndex: -10, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <div>
-          <Canvas layoutType={layoutType} />
+          <Canvas />
         </div>
       </div>
       <div style={{ zIndex: 100, padding: '0 20px', height: 60, display: 'flex', alignItems: 'center' }}>

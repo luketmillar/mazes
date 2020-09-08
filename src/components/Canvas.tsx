@@ -29,10 +29,11 @@ const getPortraitSize = (size: Size, layoutType: LayoutType) => {
     const padding = isPhone ? 20 : 50
     const possibleCanvasSize = { width: (size.width - padding * 2), height: (size.height - padding * 2) }
     const minColumns = isPhone ? 12 : 15
-    let cellSize = 40
+    const maxColumns = 30
+    let cellSize = 20
     let columns = Math.floor(possibleCanvasSize.width / cellSize)
-    if (columns > 40) {
-        columns = 40
+    if (columns > maxColumns) {
+        columns = maxColumns
     }
     if (columns < minColumns) {
         const maxCellSize = Math.floor(possibleCanvasSize.width / minColumns)
@@ -50,10 +51,11 @@ const getLandscapeSize = (size: Size, layoutType: LayoutType) => {
     const padding = isPhone ? 20 : 50
     const possibleCanvasSize = { width: (size.width - padding * 2), height: (size.height - padding * 2) }
     const minRows = isPhone ? 12 : 15
-    let cellSize = 40
+    const maxRows = 30
+    let cellSize = 20
     let rows = Math.floor(possibleCanvasSize.height / cellSize)
-    if (rows > 40) {
-        rows = 40
+    if (rows > maxRows) {
+        rows = maxRows
     }
     if (rows < minRows) {
         const maxCellSize = Math.floor(possibleCanvasSize.height / minRows)
@@ -72,11 +74,7 @@ const getSizeForLayout = () => {
     return getSize(windowSize, layoutType)
 }
 
-interface IProps {
-    layoutType: LayoutType
-}
-
-const Canvas = ({ layoutType }: IProps) => {
+const Canvas = () => {
     const [won, setWon] = React.useState(false)
     const size = React.useMemo(() => getSizeForLayout(), [])
     const controller = React.useMemo(() => new Controller(size.rows, size.columns, size.cellSize), [size])
