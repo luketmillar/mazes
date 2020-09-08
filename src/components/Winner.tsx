@@ -70,7 +70,13 @@ const Winner = ({ nextLevel, controller }: { nextLevel: () => void, controller: 
     return <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ backgroundColor: 'white', borderRadius: 20, boxShadow: '0 5px 15px rgba(0,0,0,.5)', width: width * 0.75, height: height * 0.75 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', position: 'relative' }}>
-                {url && <a href={url} download="amaze.fun.png"><img style={{ width: width / imageSizeRatio, height: height / imageSizeRatio }} src={url} alt="Level screenshot" /></a>}
+                {url &&
+                    isTouchDevice() ?
+                    <img style={{ width: width / imageSizeRatio, height: height / imageSizeRatio }} src={url} alt="Level screenshot" /> : (
+                        <a href={url} download="amaze.fun.png">
+                            <img style={{ width: width / imageSizeRatio, height: height / imageSizeRatio }} src={url} alt="Level screenshot" />
+                        </a>
+                    )}
                 <div style={{
                     fontSize: getButtonFontSize(layoutType),
                     color: 'white',
@@ -81,7 +87,8 @@ const Winner = ({ nextLevel, controller }: { nextLevel: () => void, controller: 
                     width: '100%',
                     position: 'absolute',
                     bottom: -100,
-                    right: getRight(layoutType)
+                    right: getRight(layoutType),
+                    pointerEvents: 'none'
                 }}>
                     <div style={{
                         display: 'flex',
