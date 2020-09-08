@@ -23,7 +23,7 @@ const useInputHandler = (controller: Controller, inputRef: React.RefObject<HTMLD
         }
         e.stopPropagation()
         const touch = e.touches[0]
-        inputHandler.onMouseMove({ x: touch.clientX, y: touch.clientY })
+        inputHandler.onTouchMove({ x: touch.clientX, y: touch.clientY })
     }, [inputHandler])
     const handleTouchEnd = React.useCallback((e: TouchEvent) => {
         e.preventDefault()
@@ -31,7 +31,7 @@ const useInputHandler = (controller: Controller, inputRef: React.RefObject<HTMLD
             return
         }
         e.stopPropagation()
-        inputHandler.onMouseUp()
+        inputHandler.onTouchEnd()
     }, [inputHandler])
     React.useEffect(() => {
         inputHandler.setElement(inputRef.current!)
@@ -89,7 +89,7 @@ const InputLayer = ({ controller }: IProps) => {
         }
         e.stopPropagation()
         const touch = e.touches[0]
-        inputHandler.onMouseDown({ x: touch.clientX, y: touch.clientY })
+        inputHandler.onTouchStart({ x: touch.clientX, y: touch.clientY })
     }, [inputHandler])
     return <div ref={inputRef} style={{ width: '100%', height: '100%' }} onMouseDown={handleMouseDown} onTouchStart={handleTouchStart} />
 }

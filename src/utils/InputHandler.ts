@@ -15,6 +15,7 @@ enum InputEvent {
 
 interface IEventOptions {
     metaKey?: boolean
+    isTouch?: boolean
 }
 
 const calcAngleDegrees = (x: number, y: number) => {
@@ -131,10 +132,6 @@ export default class InputHandler {
     }
 
     public onMouseDown = (pixel: Pixel, options?: IEventOptions) => {
-        this.swipeGestureRecognizer = new SwipeGestureRecognizer(pixel)
-        if (this.isSwiping) {
-            return
-        }
         const position = this.positionFromPixel(pixel)
         if (position === undefined) {
             return
@@ -149,11 +146,6 @@ export default class InputHandler {
     }
 
     public onMouseMove = (pixel: Pixel) => {
-        if (this.swipeGestureRecognizer !== undefined) {
-            if (!this.swipeGestureRecognizer!.onMove(pixel)) {
-                this.swipeGestureRecognizer = undefined
-            }
-        }
         if (!this.isDrawing) {
             return
         }
@@ -169,17 +161,34 @@ export default class InputHandler {
     }
 
     public onMouseUp = () => {
+        if (this.lastPosition !== undefined) {
+            this.notify(InputEvent.End, this.lastPosition)
+        }
+        this.downOptions = undefined
+        this.lastPosition = undefined
+    }
+
+    public onTouchStart = (pixel: Pixel) => {
+        this.swipeGestureRecognizer = new SwipeGestureRecognizer(pixel)
+    }
+
+    public onTouchMove = (pixel: Pixel) => {
+        if (this.swipeGestureRecognizer === undefined) {
+            return
+        }
+        if (!this.swipeGestureRecognizer.onMove(pixel)) {
+            // cancel the swipe if the move returns false
+            this.swipeGestureRecognizer = undefined
+        }
+    }
+
+    public onTouchEnd = () => {
         const swipeDirection = this.swipeGestureRecognizer?.onEnd()
         this.swipeGestureRecognizer = undefined
         if (swipeDirection !== undefined) {
             this.isSwiping = true
             this.notifySwipe(swipeDirection)
         }
-        if (this.lastPosition !== undefined) {
-            this.notify(InputEvent.End, this.lastPosition)
-        }
-        this.downOptions = undefined
-        this.lastPosition = undefined
     }
 
     public subscribe(callbacks: Callbacks) {
