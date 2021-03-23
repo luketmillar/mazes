@@ -17,22 +17,23 @@ export default class MazeRenderer {
     public draw = (ctx: CanvasRenderingContext2D) => {
         ctx.strokeStyle = '#fff'
         ctx.lineWidth = 2 * window.devicePixelRatio
-        this.drawLine(ctx, { x: 0, y: 0 }, { x: this.width, y: 0 })
-        this.grid.rows.forEach((row, r) => {
-            const yTop = r * this.cellSize
-            const yBottom = (r + 1) * this.cellSize
-            this.drawLine(ctx, { x: 0, y: yTop }, { x: 0, y: yBottom })
-            row.forEach((cell, j) => {
-                const xLeft = j * this.cellSize
-                const xRight = (j + 1) * this.cellSize
-                if (!cell.isLinked(Direction.East)) {
-                    this.drawLine(ctx, { x: xRight, y: yTop }, { x: xRight, y: yBottom })
-                }
-                if (!cell.isLinked(Direction.South)) {
-                    this.drawLine(ctx, { x: xLeft, y: yBottom }, { x: xRight, y: yBottom })
-                }
-            })
-        })
+        // this.drawLine(ctx, { x: 0, y: 0 }, { x: this.width, y: 0 })
+        // this.grid.rows.forEach((row, r) => {
+        //     const yTop = r * this.cellSize
+        //     const yBottom = (r + 1) * this.cellSize
+        //     this.drawLine(ctx, { x: 0, y: yTop }, { x: 0, y: yBottom })
+        //     row.forEach((cell, j) => {
+        //         const xLeft = j * this.cellSize
+        //         const xRight = (j + 1) * this.cellSize
+        //         if (!cell.isLinked(Direction.East)) {
+        //             this.drawLine(ctx, { x: xRight, y: yTop }, { x: xRight, y: yBottom })
+        //         }
+        //         if (!cell.isLinked(Direction.South)) {
+        //             this.drawLine(ctx, { x: xLeft, y: yBottom }, { x: xRight, y: yBottom })
+        //         }
+        //     })
+        // })
+
     }
 
     public get width() {
@@ -44,15 +45,70 @@ export default class MazeRenderer {
     }
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position, overlay = false) {
-        this.drawRectangle(ctx, start, overlay ? '#15F46A' : `#14AC4E`)
+        // this.drawRectangle(ctx, start, overlay ? '#15F46A' : `#14AC4E`)
         this.drawRectangle(ctx, end, `#E1219B`)
     }
 
     public drawCharacter(ctx: CanvasRenderingContext2D, character: Character) {
-        character.paths.forEach(path => {
-            this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.3)
-        })
+        // character.paths.forEach(path => {
+        //     this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.3)
+        // })
+        if (isNaN(character.position.column)) {
+            return
+        }
         this.drawRectangle(ctx, character.position, '#15F46A')
+
+        ctx.strokeStyle = '#fff'
+        ctx.lineWidth = 2 * window.devicePixelRatio
+        const queue: Array<{ row: number, column: number, direction?: Direction }> = [{ row: character.row, column: character.column }]
+        const drawWalls = (row: number, column: number, direction?: Direction) => {
+            const cell = this.grid.rows[row][column]
+            const yTop = row * this.cellSize
+            const yBottom = (row + 1) * this.cellSize
+            const xLeft = column * this.cellSize
+            const xRight = (column + 1) * this.cellSize
+            if (!cell.isLinked(Direction.East)) {
+                this.drawLine(ctx, { x: xRight, y: yTop }, { x: xRight, y: yBottom })
+            } else if (direction === undefined || direction === Direction.East) {
+                const east = cell.east
+                if (east) {
+                    queue.push({ row: east.row, column: east.column, direction: Direction.East })
+                }
+            }
+            if (!cell.isLinked(Direction.South)) {
+                this.drawLine(ctx, { x: xLeft, y: yBottom }, { x: xRight, y: yBottom })
+            } else if (direction === undefined || direction === Direction.South) {
+                const south = cell.south
+                if (south) {
+                    queue.push({ row: south.row, column: south.column, direction: Direction.South })
+                }
+            }
+            if (!cell.isLinked(Direction.North)) {
+                this.drawLine(ctx, { x: xLeft, y: yTop }, { x: xRight, y: yTop })
+            } else if (direction === undefined || direction === Direction.North) {
+                const north = cell.north
+                if (north) {
+                    queue.push({ row: north.row, column: north.column, direction: Direction.North })
+                }
+            }
+            if (!cell.isLinked(Direction.West)) {
+                this.drawLine(ctx, { x: xLeft, y: yTop }, { x: xLeft, y: yBottom })
+            } else if (direction === undefined || direction === Direction.West) {
+                const west = cell.west
+                if (west) {
+                    queue.push({ row: west.row, column: west.column, direction: Direction.West })
+                }
+            }
+        }
+        while (queue.length > 0) {
+            const position = queue.shift()
+            if (position === undefined) {
+                break
+            }
+            console.log('draw', position)
+            drawWalls(position.row, position.column, position.direction)
+        }
+        console.log('done')
     }
 
     public setTime(timestamp: number) {
