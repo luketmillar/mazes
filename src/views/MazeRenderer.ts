@@ -14,26 +14,27 @@ export default class MazeRenderer {
         this.cellSize = cellSize
     }
 
-    public draw = (ctx: CanvasRenderingContext2D) => {
+    public draw = (ctx: CanvasRenderingContext2D, screenshot = false) => {
         ctx.strokeStyle = '#fff'
         ctx.lineWidth = 2 * window.devicePixelRatio
-        // this.drawLine(ctx, { x: 0, y: 0 }, { x: this.width, y: 0 })
-        // this.grid.rows.forEach((row, r) => {
-        //     const yTop = r * this.cellSize
-        //     const yBottom = (r + 1) * this.cellSize
-        //     this.drawLine(ctx, { x: 0, y: yTop }, { x: 0, y: yBottom })
-        //     row.forEach((cell, j) => {
-        //         const xLeft = j * this.cellSize
-        //         const xRight = (j + 1) * this.cellSize
-        //         if (!cell.isLinked(Direction.East)) {
-        //             this.drawLine(ctx, { x: xRight, y: yTop }, { x: xRight, y: yBottom })
-        //         }
-        //         if (!cell.isLinked(Direction.South)) {
-        //             this.drawLine(ctx, { x: xLeft, y: yBottom }, { x: xRight, y: yBottom })
-        //         }
-        //     })
-        // })
-
+        if (screenshot) {
+            this.drawLine(ctx, { x: 0, y: 0 }, { x: this.width, y: 0 })
+            this.grid.rows.forEach((row, r) => {
+                const yTop = r * this.cellSize
+                const yBottom = (r + 1) * this.cellSize
+                this.drawLine(ctx, { x: 0, y: yTop }, { x: 0, y: yBottom })
+                row.forEach((cell, j) => {
+                    const xLeft = j * this.cellSize
+                    const xRight = (j + 1) * this.cellSize
+                    if (!cell.isLinked(Direction.East)) {
+                        this.drawLine(ctx, { x: xRight, y: yTop }, { x: xRight, y: yBottom })
+                    }
+                    if (!cell.isLinked(Direction.South)) {
+                        this.drawLine(ctx, { x: xLeft, y: yBottom }, { x: xRight, y: yBottom })
+                    }
+                })
+            })
+        }
     }
 
     public get width() {
@@ -44,15 +45,20 @@ export default class MazeRenderer {
         return this.grid.rowCount * this.cellSize
     }
 
-    public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position, overlay = false) {
-        // this.drawRectangle(ctx, start, overlay ? '#15F46A' : `#14AC4E`)
+    public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position, overlay = false, screenshot = false) {
+        if (screenshot) {
+            this.drawRectangle(ctx, start, overlay ? '#15F46A' : `#14AC4E`)
+        }
         this.drawRectangle(ctx, end, `#E1219B`)
     }
 
-    public drawCharacter(ctx: CanvasRenderingContext2D, character: Character) {
-        // character.paths.forEach(path => {
-        //     this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.3)
-        // })
+    public drawCharacter(ctx: CanvasRenderingContext2D, character: Character, screenshot = false) {
+        if (screenshot) {
+            character.paths.forEach(path => {
+                this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.3)
+            })
+            return
+        }
         if (isNaN(character.position.column)) {
             return
         }

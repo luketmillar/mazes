@@ -50,8 +50,8 @@ class Save extends BaseCommand {
         ctx.fillStyle = '#222'
         ctx.fillRect(0, 0, canvas.width, canvas.height)
         ctx.setTransform(1, 0, 0, 1, 20, 20)
-        controller.drawMaze(ctx, false)
-        controller.drawCharacter(ctx, false)
+        controller.drawMaze(ctx, false, true)
+        controller.drawCharacter(ctx, false, true)
         controller.drawEnd(ctx, false)
         ctx.fillStyle = '#fff'
         ctx.font = `bold ${getFontSize()}px "Montserrat"`
