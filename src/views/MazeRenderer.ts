@@ -47,7 +47,7 @@ export default class MazeRenderer {
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position, overlay = false, screenshot = false) {
         if (screenshot) {
-            this.drawRectangle(ctx, start, overlay ? '#15F46A' : `#14AC4E`)
+            this.drawRectangle(ctx, start, overlay ? '#07C1FF' : `#43B8DF`)
         }
         this.drawRectangle(ctx, end, `#E1219B`)
     }
@@ -55,14 +55,14 @@ export default class MazeRenderer {
     public drawCharacter(ctx: CanvasRenderingContext2D, character: Character, screenshot = false) {
         if (screenshot) {
             character.paths.forEach(path => {
-                this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.3)
+                this.drawPath(ctx, path, '#43B8DF', this.cellSize * 0.3)
             })
             return
         }
         if (isNaN(character.position.column)) {
             return
         }
-        this.drawRectangle(ctx, character.position, '#15F46A')
+        this.drawRectangle(ctx, character.position, '#07C1FF')
 
         ctx.strokeStyle = '#fff'
         ctx.lineWidth = 2 * window.devicePixelRatio
