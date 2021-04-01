@@ -30,7 +30,7 @@ const getPortraitSize = (size: Size, layoutType: LayoutType) => {
     const possibleCanvasSize = { width: (size.width - padding * 2), height: (size.height - padding * 2) }
     const minColumns = isPhone ? 12 : 15
     const maxColumns = 30
-    let cellSize = 20
+    let cellSize = 100
     let columns = Math.floor(possibleCanvasSize.width / cellSize)
     if (columns > maxColumns) {
         columns = maxColumns
@@ -52,7 +52,7 @@ const getLandscapeSize = (size: Size, layoutType: LayoutType) => {
     const possibleCanvasSize = { width: (size.width - padding * 2), height: (size.height - padding * 2) }
     const minRows = isPhone ? 12 : 15
     const maxRows = 30
-    let cellSize = 20
+    let cellSize = 100
     let rows = Math.floor(possibleCanvasSize.height / cellSize)
     if (rows > maxRows) {
         rows = maxRows

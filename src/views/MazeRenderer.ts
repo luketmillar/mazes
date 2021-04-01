@@ -45,14 +45,14 @@ export default class MazeRenderer {
         return this.grid.rowCount * this.cellSize
     }
 
-    public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position, overlay = false, screenshot = false) {
-        if (screenshot) {
-            this.drawRectangle(ctx, start, overlay ? '#07C1FF' : `#43B8DF`)
-        }
-        this.drawRectangle(ctx, end, `#E1219B`)
-    }
+    // public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position, overlay = false, screenshot = false) {
+    //     if (screenshot) {
+    //         this.drawRectangle(ctx, start, overlay ? '#07C1FF' : `#43B8DF`)
+    //     }
+    //     this.drawRectangle(ctx, end, `#E1219B`)
+    // }
 
-    public drawCharacter(ctx: CanvasRenderingContext2D, character: Character, screenshot = false) {
+    public drawCharacter(ctx: CanvasRenderingContext2D, character: Character, end: Position, screenshot = false) {
         if (screenshot) {
             character.paths.forEach(path => {
                 this.drawPath(ctx, path, '#43B8DF', this.cellSize * 0.3)
@@ -62,6 +62,9 @@ export default class MazeRenderer {
         if (isNaN(character.position.column)) {
             return
         }
+        ctx.save()
+        const cellBounds = this.getCellBounds(character.position)
+        ctx.transform(1, 0, 0, 1, -cellBounds.left + ctx.canvas.width / 2, -cellBounds.top + ctx.canvas.height / 2)
         this.drawRectangle(ctx, character.position, '#07C1FF')
 
         ctx.strokeStyle = '#fff'
@@ -111,10 +114,10 @@ export default class MazeRenderer {
             if (position === undefined) {
                 break
             }
-            console.log('draw', position)
             drawWalls(position.row, position.column, position.direction)
         }
-        console.log('done')
+        this.drawRectangle(ctx, end, `#E1219B`)
+        ctx.restore()
     }
 
     public setTime(timestamp: number) {
@@ -161,6 +164,7 @@ export default class MazeRenderer {
         ctx.fillStyle = color
         const cellBounds = this.getCellBounds(position)
         const size = this.cellSize * 0.7
+        console.log(size)
         ctx.fillRect(cellBounds.center - size / 2, cellBounds.middle - size / 2, size, size)
     }
     private getCellBounds = (position: Position) => {
