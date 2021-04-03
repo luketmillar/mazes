@@ -15,13 +15,13 @@ class Character extends BaseCommand {
     public do(controller: Controller, e: KeyboardEvent) {
         switch (e.keyCode) {
             case Arrow.Left:
-                return controller.left()
+                return controller.lookLeft()
             case Arrow.Up:
-                return controller.up()
+                return controller.forward()
             case Arrow.Right:
-                return controller.right()
+                return controller.lookRight()
             case Arrow.Down:
-                return controller.down()
+                return controller.backward()
         }
     }
 }

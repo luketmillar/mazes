@@ -51,51 +51,92 @@ export default class Controller extends Subscribable<ControllerEvent> {
         this.character = new Character(this.maze.start.row, this.maze.start.column)
         this.notify(ControllerEvent.All)
     }
-
-    public up() {
+    public forward() {
+        let angle = this.character._angle
+        if (angle >= Math.PI * 2) {
+            angle = angle - (Math.PI * 2)
+        }
+        if (angle < 0) {
+            angle += Math.PI * 2
+        }
+        if (angle === 0) {
+            this.up(true)
+        } else if (angle === Math.PI / 2) {
+            this.left(true)
+        } else if (angle === Math.PI) {
+            this.down(true)
+        } else {
+            this.right(true)
+        }
+    }
+    public backward() {
+        let angle = this.character._angle
+        if (angle >= Math.PI * 2) {
+            angle = angle - (Math.PI * 2)
+        }
+        if (angle < 0) {
+            angle += Math.PI * 2
+        }
+        if (angle === 0) {
+            this.down(true)
+        } else if (angle === Math.PI / 2) {
+            this.right(true)
+        } else if (angle === Math.PI) {
+            this.up(true)
+        } else {
+            this.left(true)
+        }
+    }
+    public up(oneStep = false) {
         let cell = this.currentCell
         while (cell.canGo(Direction.North)) {
             const next = cell.north!
             cell = next
-            if (cell.atIntersection) {
+            if (cell.atIntersection || oneStep) {
                 break
             }
         }
         this.moveCharacter(cell)
     }
-    public down() {
+    public down(oneStep = false) {
         let cell = this.currentCell
         while (cell.canGo(Direction.South)) {
             const next = cell.south!
             cell = next
-            if (cell.atIntersection) {
+            if (cell.atIntersection || oneStep) {
                 break
             }
         }
         this.moveCharacter(cell)
     }
-    public left() {
+    public left(oneStep = false) {
         let cell = this.currentCell
         while (cell.canGo(Direction.West)) {
             const next = cell.west!
             cell = next
-            if (cell.atIntersection) {
+            if (cell.atIntersection || oneStep) {
                 break
             }
         }
         this.moveCharacter(cell)
 
     }
-    public right() {
+    public right(oneStep = false) {
         let cell = this.currentCell
         while (cell.canGo(Direction.East)) {
             const next = cell.east!
             cell = next
-            if (cell.atIntersection) {
+            if (cell.atIntersection || oneStep) {
                 break
             }
         }
         this.moveCharacter(cell)
+    }
+    public lookLeft() {
+        this.character.rotate(Math.PI / 2)
+    }
+    public lookRight() {
+        this.character.rotate(-Math.PI / 2)
     }
 
     public canMoveTo(position: Position) {

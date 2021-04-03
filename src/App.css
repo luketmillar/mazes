@@ -1,16 +1,28 @@
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
+html,
 body {
   background-color: #222;
-  color: #fff;
   font-family: 'Montserrat';
   touch-action: none;
-  /* height: 100%;
-  width: 100%;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
   overflow: hidden;
-  position: fixed; */
+}
+
+#root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
 }
 
 .menu {
