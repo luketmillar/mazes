@@ -16,6 +16,7 @@ export class Wall extends Element {
         shape.computeVertexNormals()
         // const material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.FrontSide })
         const material = new THREE.MeshPhongMaterial({ map: texture })
+        material.lightMap = texture
         this.mesh = new THREE.Mesh(shape, material)
         this.mesh.castShadow = false
         this.mesh.receiveShadow = true
