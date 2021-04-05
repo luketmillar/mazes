@@ -28,14 +28,14 @@ export default class Piston {
         // this.flashlight.shadow.mapSize.width = 1024
         // this.flashlight.shadow.mapSize.height = 1024
         this.flashlight.penumbra = 1
-        this.flashlight.angle = 0.5
-        // this.flashlight.distance = 5
+        this.flashlight.angle = 0.3
+        this.flashlight.distance = 5
         this.flashlight.intensity = 0.5
         this.flashlight.shadow.mapSize.width = 512 // default
         this.flashlight.shadow.mapSize.height = 512 // default
         this.flashlight.shadow.camera.near = 0.5 // default
         this.flashlight.shadow.camera.far = 500 // default
-        this.light = new THREE.AmbientLight(0xffffff, 0.05)
+        this.light = new THREE.AmbientLight(0xffffff, 0.01)
         // this.camera.add(this.light)
         // this.light.position.set(0, 0, 1)
     }
@@ -101,7 +101,7 @@ export default class Piston {
 
         // this.scene.add(this.flashlight)
         const spotLightHelper = new THREE.SpotLightHelper(this.flashlight)
-        this.scene.add(spotLightHelper)
+        // this.scene.add(spotLightHelper)
         this.light.position.set(5, 15, 5)
         this.scene.add(this.light)
 

@@ -28,7 +28,7 @@ const useCanvasResizer = (ref: React.RefObject<HTMLCanvasElement>) => {
 
 const App = () => {
     const ref = React.useRef<HTMLCanvasElement>(null)
-    const controller = React.useMemo(() => new Controller(20, 20, 20), [])
+    const controller = React.useMemo(() => new Controller(10, 10, 20), [])
     useCanvasResizer(ref)
 
     React.useEffect(() => {
