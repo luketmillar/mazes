@@ -44,15 +44,19 @@ export default class MazeRenderer {
     }
 
     public drawStartEnd(ctx: CanvasRenderingContext2D, start: Position, end: Position, overlay = false) {
-        this.drawRectangle(ctx, start, overlay ? '#15F46A' : `#14AC4E`)
+        if (overlay) {
+            this.drawRectangle(ctx, start, '#07C1FF')
+        }
         this.drawRectangle(ctx, end, `#E1219B`)
     }
 
-    public drawCharacter(ctx: CanvasRenderingContext2D, character: Character) {
-        character.paths.forEach(path => {
-            this.drawPath(ctx, path, '#14AC4E', this.cellSize * 0.3)
-        })
-        this.drawRectangle(ctx, character.position, '#15F46A')
+    public drawCharacter(ctx: CanvasRenderingContext2D, character: Character, overlay: boolean) {
+        if (overlay) {
+            character.paths.forEach(path => {
+                this.drawPath(ctx, path, '#43B8DF', this.cellSize * 0.3)
+            })
+        }
+        this.drawRectangle(ctx, character.position, '#07C1FF')
     }
 
     public setTime(timestamp: number) {

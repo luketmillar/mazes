@@ -112,11 +112,11 @@ export default class Controller extends Subscribable<ControllerEvent> {
         this.renderer.drawStartEnd(ctx, this.maze.start, this.maze.end)
     }
 
-    public drawCharacter(ctx: CanvasRenderingContext2D, clear = true) {
+    public drawCharacter(ctx: CanvasRenderingContext2D, clear = true, overlay = false) {
         if (clear) {
             this.renderer.clear(ctx)
         }
-        this.renderer.drawCharacter(ctx, this.character)
+        this.renderer.drawCharacter(ctx, this.character, overlay)
     }
 
     public drawEnd(ctx: CanvasRenderingContext2D, clear = true) {
